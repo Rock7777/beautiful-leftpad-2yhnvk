@@ -1,0 +1,190 @@
+questions I can ask -
+
+1. I can start with this question:
+
+   var p = new Promise(resolve => {
+  setTimeout(() => resolve(42), 0)
+}).finally(val => {
+  console.log('done', val)
+})
+console.log(p)
+
+and ask the console output then ask how it can be resolved
+
+Solution:
+
+var p2 = new Promise(resolve => {
+  setTimeout(() => resolve(42), 0)
+})
+.then(val => {
+  console.log('done', val)
+  return val        // preserve resolution
+})
+.finally(() => {
+  // side-effects only — no val here
+})
+
+2. explain error boundary with an example
+   and start asking some questions on top of that
+
+3. give me three tabs 
+   everyday tasks reports results
+   and then use lazy loading 
+   
+   learn to implement the below code once done u can mark it complete
+   
+   
+   App.js
+   
+   
+   import React, { Suspense, lazy } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+// Lazy-loaded components
+const Reports = lazy(() => import("./pages/Reports"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Settings = lazy(() => import("./pages/Settings"));
+
+export default function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Router>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/settings" element={<Settings />} />
+          {/* Redirect to dashboard by default */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </Router>
+    </Suspense>
+  );
+}
+
+Dashboard.jsx(everyday tasks) same code for reports and results page
+
+import React from "react";
+
+export default function Dashboard() {
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>Dashboard</h1>
+      <p>Welcome to the Dashboard page.</p>
+    </div>
+  );
+}
+
+4. write code for useDebouncedEffect custom hook and explain step by step learn the below code and mark it as complete once done
+   
+   import { useEffect, useRef } from "react";
+
+/**
+ * Custom hook that runs an effect only after a certain delay
+ * without re-triggering it on every rapid change (debounced effect).
+ */
+export function useDebouncedEffect(effect, deps, delay) {
+  const callback = useRef(effect);
+
+  // Keep latest effect in ref to avoid stale closure problems
+  useEffect(() => {
+    callback.current = effect;
+  }, [effect]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      callback.current();
+    }, delay);
+
+    return () => clearTimeout(handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...(deps || []), delay]);
+}
+
+
+import React, { useState } from "react";
+import { useDebouncedEffect } from "./useDebouncedEffect";
+
+export default function SearchBox() {
+  const [query, setQuery] = useState("");
+
+  useDebouncedEffect(
+    () => {
+      if (query.trim()) {
+        console.log("🔍 Fetching data for:", query);
+      }
+    },
+    [query],
+    500 // delay
+  );
+
+  return (
+    <input
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      placeholder="Type to search..."
+    />
+  );
+}
+
+5. explain HOC in a real world scenario or make use of HOC for authentication , mark it complete once u understand it completely
+
+   code:
+  
+   
+   // auth.js
+export const isAuthenticated = () => {
+  // Simulate auth check (e.g., from localStorage or context)
+  return localStorage.getItem("userToken") !== null;
+};
+
+HOC
+
+// withAuth.js
+import React from "react";
+import { isAuthenticated } from "./auth";
+
+export function withAuth(WrappedComponent) {
+  return function ProtectedComponent(props) {
+    if (!isAuthenticated()) {
+      return <div>Please log in to access this page.</div>;
+    }
+
+    // Forward props to the wrapped component
+    return <WrappedComponent {...props} />;
+  };
+}
+
+
+Use HOC with component
+
+// Dashboard.js
+import React from "react";
+import { withAuth } from "./withAuth";
+
+function Dashboard({ username }) {
+  return <h1>Welcome to the dashboard, {username}!</h1>;
+}
+
+// Wrap Dashboard with authentication
+export default withAuth(Dashboard);
+
+finally render in App.js
+
+// App.js
+import React from "react";
+import Dashboard from "./Dashboard";
+
+function App() {
+  return (
+    <div>
+      <Dashboard username="Alice" />
+    </div>
+  );
+}
+
+export default App;
+
+does React do batch update?
+
+why do we use Strict mode?
+
