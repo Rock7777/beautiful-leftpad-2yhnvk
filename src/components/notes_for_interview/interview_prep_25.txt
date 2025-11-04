@@ -86,9 +86,51 @@ complete this also today - 4th Nov,2025
 
 react state management, context API, controlled/uncontrolled components, prop drilling learn abt redux state management also
  
-JS types, engine used, arrow function (this binding), advantage of using arrow function, destructuring, promises, async/await 
+JS types, engine used, arrow function (this binding) --> arrow functions don't create their own this
+they borrow it from surrounding code --> need to check on it, 
+advantage of using arrow function, 
+destructuring, 
+promises, 
+async/await 
+
+JS Types:
+
+they are primitive - string,number,boolean and non-primitive data types - Object
+
+typeof [1,2,3] --> object
+typeof function(){} --> function
  
-Typescript interface/type 
+Typescript interface/type
+
+what is event loop in JS?
+
+JS is actually single thread event loop is a system which enables JS handle asynchronous code
+
+first there is call stack where synchronous code gets executed , once executed it will be removed
+
+second there is web api's which are provided by browsers which run outside call stack , 
+
+
+they handle async tasks like DOM events, promises , async/await and fetch
+
+next Promises , async/await will be put in micro task queue which has higher priority and something like setTimeout will be put in callback queue
+
+so the process is first synchronous code gets executed then when call stack is empty it checks for tasks from callback queue if present it executes it if not it does the same
+for microtaskqueue 
+
+what is JS engine and how it works?
+
+JS engine is a program which runs inside ur browser to read , interpret and execute JS code
+
+so stages in tat:
+
+1. Parsing- it builds a abstract syntax tree
+2.JIT compiler and frequently used hot code will be optimized for better performance
+3. finally optimized machine code which runs on CPI
+
+JS engine manages call stack, async tasks memory allocation , garbage collection --> it dynamically frees the memory when tat particular object or variable is not used
+
+example of JS engine is V8 which runs on chrome,edge developed by google
  
 Next.js routing, data fetching, REST API overview, Get/put/post/delete/patch, Next.js backend capabilities  
 
@@ -305,6 +347,22 @@ export default Component1;
   </div>)
   
 3. build a loader component with css only
+
+
+for tomorrow learn
+ 
+1. map,reduce,filter
+2. call,apply,bind
+3. promises
+4. async/await
+5. data fetching , custom hooks , HOC
+6. destructuring values examples
+7. rest and spread
+
+8. WHEN to use JSON.parse and when to use JSON.stringify
+
+  JSON.parse - means it converts string into object - this is needed when reading data from server
+  JSON.stringify - means it convert object into string - this is to send data to server
 
   
   
