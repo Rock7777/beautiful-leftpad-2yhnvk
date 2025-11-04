@@ -1,0 +1,311 @@
+// for all the code you can refer to repo : Rock7777/beautiful-leftpad-2yhnvk
+
+context api:
+
+to make use of context we need to make sure 3 steps are done
+
+1. create context - do it using React.createContext()
+2. after creating context, we need to provide it with a value and for the consumer
+   to consume it we need to wrap the children within the provider 
+3. finally we need to import context which we provided with a value in parent component  in the consumer
+   component , and we will be using useContext hook to get the value
+   
+   
+example code:
+
+// App.js
+
+  import React from "react";
+import "./styles.css";
+import ComponentC from "./components/ComponentC";
+
+export const UserContext = React.createContext();
+export const SportsContext = React.createContext();
+export default function App() {
+  return (
+    <div className="App">
+      <UserContext.Provider value={"Rakesh"}>
+        <SportsContext.Provider value={"Cricket"}>
+          <ComponentC />
+        </SportsContext.Provider>
+      </UserContext.Provider>
+    </div>
+  );
+}
+
+// ComponentC.js
+
+import ComponentE from "./ComponentE";
+
+const ComponentC = () => {
+  return (
+    <div>
+      <ComponentE />
+    </div>
+  );
+};
+
+export default ComponentC;
+
+
+// ComponentE.js
+
+import ComponentF from "./ComponentF";
+
+const ComponentE = () => {
+  return (
+    <div>
+      <ComponentF />
+    </div>
+  );
+};
+
+export default ComponentE;
+
+
+import { useContext } from "react";
+import { UserContext, SportsContext } from "../App";
+
+const ComponentF = () => {
+  const userName = useContext(UserContext);
+  const sportsName = useContext(SportsContext);
+  return (
+    <div>
+      <h1>ComponentF - {userName} </h1>
+      <h2>Sports - {sportsName} </h2>
+    </div>
+  );
+};
+
+export default ComponentF;
+
+
+complete this also today - 4th Nov,2025
+
+****************************************************************************************************************************
+
+react state management, context API, controlled/uncontrolled components, prop drilling learn abt redux state management also
+ 
+JS types, engine used, arrow function (this binding), advantage of using arrow function, destructuring, promises, async/await 
+ 
+Typescript interface/type 
+ 
+Next.js routing, data fetching, REST API overview, Get/put/post/delete/patch, Next.js backend capabilities  
+
+JS Question - If we have A, B, C, and D operations where A,B,C depend on D. How will you fetch them? 
+
+first fetch D using async/await and then make use of Promise.all([async A(dResult),B(dResult),C(dResult)])
+
+Implementation:
+
+async function D(){
+const dResult = await APIcall
+ return dResult
+}
+
+async function A(dResult){
+// do something
+}
+
+async function B(dResult){
+// do something
+}
+
+async function C(dResult){
+// do something
+}
+
+async function getResults()
+{
+  const dResult = await D();
+  const [aRes,bRes,cRes]=await Promise.all([A(dResult),B(dResult),C(dResult)])
+}
+getResults();
+
+we can solve the above question with promise chaining also:
+
+D().then(dResult => Promise.all([A(dResult),B(dResult),C(dResult)])).then(([a,b,c]) =>  console.log(a,b,c)).catch(err=> console.log(err))
+
+
+
+*****************************************************************************************************************************
+
+
+
+complete the below 42 programs
+
+1. Auto Complete search
+2. custom table with search,sort functionality of columns and rows
+3. dropdown menu with search functionality
+4. nested folder and file structure like vs code with create,rename,delete functionality of
+   folders and file - akshay saini refer
+5. pagination and how to handle pagination if thousands
+   of data from api i.e show dots between numbers'
+6. Infinite scrolling
+7. comments/nested commnets or youtube comments type functionality
+8. countdown timer
+9. custom modal
+10. multi step form
+11. login otp input
+12. carousel
+13. progress bar with css only and with addition of js,css'
+14. breadcrumbs
+15. drag and drop
+16. dark/light mode
+17. star rating
+18. search with pagination
+19.  date picker
+20. product filters
+
+21. counter app with increment/decrement and reset
+22. denounced input / button
+23. todo app
+24. accordion component
+25. tabs component
+26. custom hooks(input/toggle/fetch)
+27. stopwatch timer
+28. fetch and display api data
+29. form with validation
+30. useeffect cleanup demo(setTimeout/setInterval/ any event listener)
+31. usereducer hook and manage state
+32. HOC example
+33. useCallback example
+34. useMemo example
+35. lazy loading example
+36. pagination component
+37. search filter component
+38. build a calculator
+39. modal component
+40. auto complete drop-down
+41. loader component with css only and with addition of js and css
+42. error boundary example
+
+two life cycle methods in error handling are - 
+
+1. static getDerivedStateFromError(error)
+2. componentDidCatch(error,info)
+
+what is an ErrorBoundary?
+
+It is nothing but a class component which implements one or two of the above mentioned error handling
+life cycle methods , then the class component becomes an error boundary
+
+static getDerivedStateFromError method is used to render fallback UI when a error is thrown in code and componentDidCatch method logs the 
+error information
+
+ErrorBoundary , they are highly useful in production because they render a fallback UI instead of crashing the entire application
+
+but in development they show errors as many as possible , to log the error info we have life cycle method componentDidCatch(error,info)
+but React in development mode however logs the info in console , this method will be helpful in production
+
+Note: error boundaries catch error during rendering and they do not catch errors in eventhandler methods for tat we need to use regular try catch blocks only
+
+
+then complete the 10 videos and code it along the way:
+
+https://www.youtube.com/watch?v=UTky8eipUhA&list=PLlasXeu85E9cciv04MYWscodnbRFqACsH
+
+after this : complete next js full course by code evolution which is 7 hrs long 
+
+and then complete react native - that's it we get 30 lpa job lets go
+
+lets check on CI/CD and AWS (today - 31st october)
+
+AWS Code Deploy with Code Pipeline
+
+****************************************************************
+work on 4th November -
+
+1. build a usePrevious hook showing the previous state value and current state value
+
+usePrevious.js
+
+import { useRef, useEffect } from "react";
+
+const usePrevious = (value) => {
+  const ref1 = useRef();
+  useEffect(() => {
+    ref1.current = value;
+  }, [value]);
+  return ref1.current;
+};
+
+export default usePrevious;
+
+Component1.js
+
+import { useState } from "react";
+import usePrevious from "./usePrevious";
+
+const Component1 = () => {
+  const [text, setText] = useState("");
+  const prevStateValue = usePrevious(text);
+  return (
+    <div>
+      <h1>Component1</h1>
+      <input
+        type="text"
+        onChange={(e) => setText(e.target.value)}
+        value={text}
+      />
+      <h2>
+        Value-{text} and PreviousValue - {prevStateValue}{" "}
+      </h2>
+    </div>
+  );
+};
+
+export default Component1;
+
+2. Error Boundary Example
+
+  ErrorBoundary.js
+  
+  class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+	this.state = {
+	hasError: false
+  }
+  }
+  static getDerivedStateFromError(error) {
+	return {hasError: true}
+  }
+  componentDidCatch(error,errorInfo) {
+	console.error("Something went wrong!!",error,errorInfo)
+  }
+  render(){
+	if(this.state.hasError) {
+	return <h2>Something went wrong!!!</h2>}
+  }
+  return this.props.children
+  }
+  
+  Component2.js
+  
+  const Component2 = ()=>
+  {
+	const [count,setCount] = useState(0)
+	if(count === 3)
+	{
+	  throw new Error("count value is 3!App crashed!!")
+	}
+	return(
+	  <button onClick={()=> setCount(count+1)>Count - {count}</button>
+	)
+  }
+  
+  finally in App.js:
+  
+  return(
+  <div>
+   <ErrorBoundary>
+    <Component2/>
+   </ErrorBoundary
+  </div>)
+  
+3. build a loader component with css only
+
+  
+  
+  
