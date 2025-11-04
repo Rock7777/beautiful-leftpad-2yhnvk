@@ -4,6 +4,8 @@ import ComponentC from "./components/ComponentC";
 import Component1 from "./components/customhooks/Component1";
 import Component2 from "./components/Component2";
 import ErrorBoundary from "./components/ErrorBoundary";
+import UnControlledComponent from "./components/UnControlledComponent";
+import ControlledComponent from "./components/ControlledComponent";
 
 export const UserContext = React.createContext();
 export const SportsContext = React.createContext();
@@ -19,6 +21,8 @@ export default function App() {
       <ErrorBoundary>
         <Component2 />
       </ErrorBoundary>
+      <UnControlledComponent />
+      <ControlledComponent />
     </div>
   );
 }
