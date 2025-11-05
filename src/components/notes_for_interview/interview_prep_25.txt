@@ -374,7 +374,43 @@ questions I need to learn today itself:
   3. I need to learn styles in scss. what is mixin.
   4. tailwind css - I can learn later
   3. cross site scripting
+
   4. what is shallow copy and deep copy
+     shallow copy - it copies only first level of object , nested objects within tat are still referenced
+	 deep copy - it copies all the levels , it is completely independent of original
+	 
+	 example of shallow copy - 
+	 
+	 const person = {
+  name: "Alice",
+  address: { city: "New York", zip: 10001 }
+};
+
+// Shallow copy using spread operator
+const shallowCopy = { ...person };
+
+shallowCopy.name = "Bob"; // changes only the copy
+shallowCopy.address.city = "Los Angeles"; // affects BOTH!
+
+console.log(person.address.city); // Los angeles
+	 
+	 
+	 example of deep copy - 
+	 
+	 const person = {
+  name: "Alice",
+  address: { city: "New York", zip: 10001 }
+};
+
+// Deep copy  (modern JS)
+const deepCopy = JSON.parse(JSON.stringify(person));
+
+deepCopy.name = "Bob";
+deepCopy.address.city = "Los Angeles";
+
+console.log(person.address.city); // "New York" ✅
+
+
   5. build a UI where on click of button it shows progress building from 1% to 100%
   below I have something called queue progress bar - with count value set to 0
   on click of 5 times it shows 5 progress bars
@@ -382,9 +418,25 @@ questions I need to learn today itself:
   
   6. learn about middleware in redux - sagas and thunk and when they are used
   7. what is use of mixin in scss
+
   8. what is pure function in JS?
+
+     1. no matter how many times you call the function if the same input is passed then the output should remain same
+	 2. it has no side effects - what is side effect?
+	 
+	 example of pure function -
+	 
+	 function add(a,b) {
+	   return a + b
+	 }
+	 
+	 
+	 add(5,3)
+	 add(5,3)
+    
 
   
   
   
+
 
