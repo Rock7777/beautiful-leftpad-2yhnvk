@@ -364,6 +364,27 @@ for tomorrow learn
   JSON.parse - means it converts string into object - this is needed when reading data from server
   JSON.stringify - means it convert object into string - this is to send data to server
 
+
+questions I need to learn today itself:
+  
+  first learn scss
+  
+  1. css modules
+  2. styled components
+  3. I need to learn styles in scss. what is mixin.
+  4. tailwind css - I can learn later
+  3. cross site scripting
+  4. what is shallow copy and deep copy
+  5. build a UI where on click of button it shows progress building from 1% to 100%
+  below I have something called queue progress bar - with count value set to 0
+  on click of 5 times it shows 5 progress bars
+  on click of 6 nothing happens initially after first one disappears only then the 6th one starts
+  
+  6. learn about middleware in redux - sagas and thunk and when they are used
+  7. what is use of mixin in scss
+  8. what is pure function in JS?
+
   
   
   
+
