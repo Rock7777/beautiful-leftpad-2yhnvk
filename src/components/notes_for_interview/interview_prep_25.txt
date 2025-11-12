@@ -433,10 +433,253 @@ console.log(person.address.city); // "New York" ✅
 	 
 	 add(5,3)
 	 add(5,3)
+
+// all answers for UOB client interview conducted in hcl need to add code for pagination will do tat today later
+
+1.function returns an object in jest how can we write test cases in jest
+
+Solution:
+
+
+getUserData.js:
+
+const getUserData = (id)=>
+{
+  if(id === 1) {
+  return {userId: 1, name:"Rock1", info:"Rock1 info"}
+}
+else if(id === 2) {
+  return {userId: 2, name:"Rock2", info:"Rock2 info"}
+}
+else {
+  return {userId: null, name:null, info:null}
+}
+}
+
+export default getUserData
+
+getUserData.test.js
+
+import {getUserData} from "./getUserData"
+
+describe("getUserData",()=>
+{
+  it("should return correct user object userId 1",()=>
+{
+  const result = getUserData(1)
+  expect(result).toEqual({userId: 1, name:"Rock1", info:"Rock1 info"})
+});
+
+it("should display the correct info for id 2",()=>
+{
+  const result = getUserData(2)
+  expect(result).toEqual({userId: 2, name:"Rock2", info:"Rock2 info"});
+});
+
+it("should display the null for unspecified id",()=>
+{
+  const result = getUserData(3)
+  expect(result).toEqual({userId: null, name:null, info:null});
+});
+})
+
+
+
+if jest not installed , npm install --save-dev jest
+
+in package.json --> "scripts" : {"test" : "jest"}
+
+run : npm test
+  
+
+2. write code for pagination in react js and by default it should load a page and onclick of particular page it 
+   has to show 5 records pertaining to tat page and it should have next and previous button 
+
+Solution:
+
+// will add it
+
+3.how to reverse an array without using reverse method
+
+Solution:
+
+const s1 = "Rakesh earns 1cr"
+const a1 = s1.split(" ")
+console.log("array",a1)
+let reversedArray = []
+for(let i=a1.length-1;i>=0;i--)
+{
+    console.log(a1[i])
+    reversedArray.push(a1[i])
+}
+const a2 = reversedArray.join(" ")
+console.log("a2:",a2) // 1cr earns Rakesh
+
+
+4.in typescript how do we write result of three numbers
+  
+Sol: function sum(num1:number,num2:number,num3:number) : number {
+    return num1 + num2 + num3
+}
+
+const p2 = sum(10,3,4)
+console.log("Sum:",p2)
+
+// Output: Sum: 17
+
+Important Note : 
+
+In typescript we define types to function arguments or return type explicitly like above for a function
+
+
+
+5.how to reverse words in an array from string
+
+Sol: 
+
+using reverse method in javascript reversing order of words
+
+const s1 = "Rakesh earns 1cr"
+const a1=s1.split(" ")
+console.log("Array:",a1.reverse().join(' ')) // --> 1cr earns Rakesh
+// reverse method can be used only on entire array not on 
+// individual elements in ar
+
+Imp Note: trim() method is used to remove empty spaces on both sides of the string
+it can be used only on string variables or objects
+ 
+ diff between string literal and string variable
+
+console.log("Hello World"); // Directly used 
+above hello world is string literal
+
+// String variable
+let greeting = "Hello World"; // Assigned from a literal --> string variable can have value from
+literal, user input or some computation and string variable can be changed as shown below
+
+console.log(greeting);
+
+// Changing variable value
+greeting = "Hi there!";
+console.log(greeting);
+
+// without using reverse method in javascript reversing order of words
+
+Solution:
+
+const s1 = "Rakesh earns 1cr"
+const a1 = s1.split(" ")
+console.log("array",a1)
+let reversedArray = []
+for(let i=a1.length-1;i>=0;i--)
+{
+    console.log(a1[i])
+    reversedArray.push(a1[i])
+}
+const a2 = reversedArray.join(" ")
+console.log("a2:",a2) // 1cr earns Rakesh
+
+
+
+
+6.useReducer hook
+
+Solution : 
+
+// will add it
+
+ 
+
+7.how to insert elements in between indexes of an array
+
+Sol: basically to insert elements in between using indexes we make use of splice method
+  which has three arguments first argument takes in the position where element needs to be inserted,
+  next argument takes the count of number of elements to be deleted from tat position if it is 0 , then
+  no element gets deleted finally last argument contains the value to be inserted.
+
+  splice method affects original array 
+
+  example code:
+
+   const a1= [1,2,4,5,6]
+   to insert element between 4 and 5 ,
+   a1.splice(3,0,6) => this means since I want to insert an element between 4 and 5,
+   the first argument is 3 indicating tat element has to be inserted at index 3 and tat element is 6 which is
+   the third argument, the second argument being zero indicates tat no elements needs to be deleted
+
+   console.log(a1) // => Output --> [1,2,4,6,5,6]
+
+learn about splice and slice method with examples ?
+
+8.what are pseudo elements and pseudo classes
+
+Solution: pseudo classes help us to add style to state of an element like for example a:hover , a:visited
+here : is the syntax for pseudo classes where as pseudo elements style specific part of an element
+
+for eg:
+ 
+.p::first-line {
+	
+}
+
+it means we apply style only to the first line of paragraph element and the syntax is ::
+
+we can combine both pseduo classes and pseudo elements
+
+
+eg: p:first-child::first-line {
+font-weight: bold;
+}
+
+
+9.what are combinators
+
+Sol: combinators in css define the relationship b/w two or more selectors
+     allowing to target and style the elements based on their position in HTML structure.
+
+ types:
+1. descendant combinator
+    
+   div p{
+   color: green; // style all the paragraph elements which are the descendants of  div
+}
+
+2. child combinator
+
+   div > p{
+    color: blue; // style only the p elements which are direct children of div
+}
+
+3. adjacent sibling combinator
+
+   h1 + p {
+   font-weight: bold; // styles only the first p which is right after an h1 meaning 
+                     // once h1 tag closes and with the same parent
+}
+
+4. general sibling combinator
+
+
+   h1 ~ p{
+   color: yellow; // styles all the p elments which are the next siblings of specified element
+   //  and share the same parent
+}
+
+
+
+
+
+
+
+
+
+
+
     
 
   
   
   
+
 
 
