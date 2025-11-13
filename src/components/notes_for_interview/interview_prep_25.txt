@@ -435,6 +435,7 @@ console.log(person.address.city); // "New York" ✅
 	 add(5,3)
 
 // all answers for UOB client interview conducted in hcl need to add code for pagination will do tat today later
+// done tat completed all answers will add complex code for useReducer later today
 
 1.function returns an object in jest how can we write test cases in jest
 
@@ -497,7 +498,126 @@ run : npm test
 
 Solution:
 
-// will add it
+// added it
+
+onLoad - it has to by default show the mentioned no.of records in tat page , by default
+it should be page 1
+on navigating to different page data should be loaded dynamically
+
+// Hardcoded array of 25 fruit names
+const fruits = [
+    "Apple",
+    "Banana",
+    "Mango",
+    "Orange",
+    "Pineapple",
+    "Grapes",
+    "Watermelon",
+    "Papaya",
+    "Strawberry",
+    "Blueberry",
+    "Raspberry",
+    "Blackberry",
+    "Cherry",
+    "Peach",
+    "Pear",
+    "Plum",
+    "Kiwi",
+    "Pomegranate",
+    "Guava",
+    "Lychee",
+    "Apricot",
+    "Cantaloupe",
+    "Dragonfruit",
+    "Fig",
+    "Coconut"
+];
+
+console.log(fruits);
+
+// Solution:
+
+// Hardcoded array of 25 fruit names
+
+import React,{useEffect,useState} from "react";
+
+const App = () =>
+{
+  const fruits = [
+    "Apple",
+    "Banana",
+    "Mango",
+    "Orange",
+    "Pineapple",
+    "Grapes",
+    "Watermelon",
+    "Papaya",
+    "Strawberry",
+    "Blueberry",
+    "Raspberry",
+    "Blackberry",
+    "Cherry",
+    "Peach",
+    "Pear",
+    "Plum",
+    "Kiwi",
+    "Pomegranate",
+    "Guava",
+    "Lychee",
+    "Apricot",
+    "Cantaloupe",
+    "Dragonfruit",
+    "Fig",
+    "Coconut"
+];
+const recordsPerPage = 5;
+const numberOfPages = fruits.length / recordsPerPage 
+const [currentPage,setCurrentPage] = useState(1)
+const [pageItems,setPageItems] = useState([])
+// indexes - 0 , 5 , 10 , 15 , 20
+const handlePageChange = (pageNumber) =>
+{
+  if(pageNumber >=1 && pageNumber <=numberOfPages)
+  {
+    setCurrentPage(pageNumber)
+  }
+}
+useEffect(()=>
+{
+  const initialIndex = (currentPage - 1) * recordsPerPage
+  const lastIndex = initialIndex + recordsPerPage
+  setPageItems(fruits.slice(initialIndex,lastIndex))
+},[currentPage])
+const pageNumbers = []
+for(let i=1;i<=recordsPerPage;i++) {
+  pageNumbers.push(i)
+}
+return(<div>
+    {pageItems.map((page,index)=>
+    {
+      return (
+      <li key={index}>
+        {page}
+      </li>)
+    })}
+  <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === recordsPerPage}>Next</button>
+  <button onClick={() => handlePageChange(currentPage - 1)} 
+  disabled = {currentPage === 1}>Previous</button>
+  {pageNumbers.map((page,index)=>
+  {
+    return(
+      <button onClick={()=>handlePageChange(page)}
+      disabled = {currentPage === index + 1}
+      key={index}>
+        {page}
+      </button>)
+  })
+  }
+  </div>)
+}
+
+export default App;
+
 
 3.how to reverse an array without using reverse method
 
@@ -586,7 +706,54 @@ console.log("a2:",a2) // 1cr earns Rakesh
 
 Solution : 
 
-// will add it
+// added it
+// will add complex useCase for useReducer today on 13th nov later
+
+it is also one of the hooks for state management along with useState hook when we have a complex state
+to maintain we prefer useReducer 
+
+below I have given a simple example lets add the complex example later
+
+App.js
+
+import React from 'react';
+import { useState, useReducer } from 'react'
+
+function App() {
+  // const [count, setCount] = useState(0)
+  const INCREMENT = "Increment"
+  const reducer = (state,action) =>
+  {
+    switch(action.type)
+    {
+      case INCREMENT:
+      return {count: state.count + 1}
+      default:
+      return state
+    }
+  }
+  const initialState = {count : 0}
+  const [state,dispatch]=useReducer(reducer,initialState)
+  
+  const handleIncrement = () =>
+  {
+    dispatch({type: INCREMENT})
+  }
+
+  return (
+    <div>
+      <h1>Hello, World!</h1>
+      <div>
+        <button onClick={handleIncrement}>
+          count {state.count}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default App
+
 
  
 
@@ -680,6 +847,7 @@ Sol: combinators in css define the relationship b/w two or more selectors
   
   
   
+
 
 
 
