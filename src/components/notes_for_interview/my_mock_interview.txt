@@ -188,3 +188,8 @@ does React do batch update?
 
 why do we use Strict mode?
 
+strictmode is a wrapper component which only runs in development , it doesn't affect production , it helps you write safe code.
+
+it detects unsafe lifecycle methods like componentWillUpdate , deprecated api's like findDOMnode
+
+
