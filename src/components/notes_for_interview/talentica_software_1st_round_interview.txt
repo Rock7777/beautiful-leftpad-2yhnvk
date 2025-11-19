@@ -1,0 +1,53 @@
+arr.push.apply(obj2,obj1,obj3)
+
+obj2 and obj3 are string arrays , obj1 is int array , arr is empty array
+
+the correct way to push the data is : -->
+
+arr.push.apply([...obj2,...obj1,...obj3])
+
+Code:
+
+var obj2 = ['T', 'S', 'R'];
+var obj3 = ['dhoni', 'Suraj', 'Rakesh'];
+var obj1 = [1, 2, 3];
+var arr = [];
+
+// Use the spread operator to merge all arrays into arr
+arr = [...obj2, ...obj1, ...obj3];
+
+console.log("arr:", arr);
+
+Output: arr: [ 'T', 'S', 'R', 1, 2, 3, 'dhoni', 'Suraj', 'Rakesh' ] --> which I think I got wrong so basically strings will be shown in
+quotes only since it is an array
+
+
+2. if(isNaN(0/0) alert(a) 
+Output: a --> I got it correct
+
+3. (function(){var x=y=7}()
+
+console.log(typeof(x)!=undefined)
+console.log(typeof(y)!=undefined)
+
+Output would be true true which I got wrong , type of x is undefined and type of y is number
+
+4. sum(...[1,2,3]) --> this is the correct answer I got it
+
+function sum(x,y,z)
+{return x + y+z}
+
+5. var a1=['t','r','z']
+({item:a1[3]} = {item: 'm'})
+
+console.log(a1)
+
+I don't understand what is issue with my code but basically output should be ['t','r','z','m']
+
+I dont know I think I got the question wrong
+
+6. alert(a)
+var a = 1
+alert(a)
+
+Output : undefined 1 --> I got it correct
