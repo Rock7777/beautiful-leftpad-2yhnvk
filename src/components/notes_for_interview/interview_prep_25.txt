@@ -832,6 +832,177 @@ Sol: combinators in css define the relationship b/w two or more selectors
    //  and share the same parent
 }
 
+// content below from here is content of file: definite_20_questions_interview_crack_boeing_client
+
+definite 20 questions to know to crack for boeing client
+
+I will provide answers only for those which I am not sure of
+
+1. what is virtual DOM and how does it differ from real DOM?
+
+Solution: algorithm used is diffing I know the rest
+
+2. what are React hooks? Can you explain useState and useEffect?
+
+Solution: I know
+
+3. explain the concept of component lifecycle in React. how is it handled
+   in functional components?
+Solution: I know
+
+4.what is React context api? how does it differ from prop drilling?
+
+Solution: Context api provides a way to share data globally across component tree I know
+
+5. what are controlled and uncontrolled components?
+
+Solution: Controlled components are where form data are controlled by react state
+form data is handled by DOM itself - uncontrolled components
+
+6. what are React fragments and who do we use them?
+
+Solution: React fragments are useful when we need to group multiple elements without needing to add extra nodes to DOM.
+they are useful when we need to render multiple elements without addition of extra div's or other html elements which will cause 
+styling issues.
+
+eg for fragment: return(<><h1>Hello!!</h1></>)
+
+7. explain concept of React's key prop in lists? why is it important?
+
+Solution: I know
+
+8. what is difference between useMemo and useCallback?
+Solution: I know
+
+Note: 
+1.in index.js this is how we import App.js
+
+index.js:
+
+import App from './App'
+import {createRoot} from "react-dom/client"
+
+const rootElement = document.getElementById("root")
+const root = createRoot(rootElement)
+
+root.render(<React.StrictMode><App/></React.StrictMode>)
+
+2. what is use of strictmode and why do we need it?
+
+Solution:  strictmode is a wrapper component which only runs in development , it doesn't affect production , it helps you write safe code.
+
+it detects unsafe lifecycle methods like componentWillUpdate , deprecated api's like findDOMnode
+
+9. what are higher order components?
+
+Solution: 
+
+
+10. explain error boundary?
+
+
+
+
+11. what are pure components?
+
+the components which render the same output if the state and props doesn't change , they make unnecessary re-renders not possible.
+they implement shouldComponentUpdate method by default but by doing shallow comparison of state and props , only if the 
+shallow comparison of state and props if there is a change then only re-render occurs which is not case with regular component.
+
+code I am just writing the skeleton
+
+example :
+
+parentcomponent.js
+
+constructor(){
+this.state ={
+name: 'Rock'}}
+
+componentDidMount(){
+setInterval(()=>{
+this.setState({
+name: ''Rock})},2000)
+}
+
+render() {
+console.log('ParentComponent render')
+return(
+<PureComponent1 name={this.state.name}/>
+<Regular Component name={this.state.name}/>
+)
+}
+
+App.js
+
+render()
+{
+  return(
+  <ParentComponent/>
+)
+}
+
+PureComponent1.js
+
+class PureComponent1 extends PureComponent{
+render() {
+console.log('PureComponent render')
+return(
+<h1>Pure - {this.props.name}</h1>
+)
+}
+}
+
+RegularComponent.js
+
+class  RegularComponent extends React.Component{
+render() {
+console.log('RegularComponent render')
+return(
+<h1>Regular - {this.props.name}</h1>
+)
+}
+}
+
+As u can see above the name is not changed after every 2 sec in parent component but after 2 sec
+we will see in console log both stmts from parent and Regular component but from Pure as it does a shallow comparison of
+props and state and sees tat there is no change and hence re-rendering will not occur
+
+Node js definite must know 20 qns?
+
+Very very important:
+
+find the closest element to zero from array : a1=[-4,-2,1,4,2]
+
+Solution:
+
+closest element to zero means whose absolute value is smallest
+
+
+
+const a1=[-4,-2,1,4,2,-1]
+let closest = a1[0]
+for(let i=0;i<a1.length;i++) {
+    if(Math.abs(a1[i]) < Math.abs(closest) 
+      || (Math.abs(a1[i] === Math.abs(closest) && a1[i] > closest)))
+    {
+        closest = a1[i]
+    }
+}
+
+// Rule is if two numbers are closest to zero choose the positive one
+console.log(closest)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -847,6 +1018,7 @@ Sol: combinators in css define the relationship b/w two or more selectors
   
   
   
+
 
 
 
