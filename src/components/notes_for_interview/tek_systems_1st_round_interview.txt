@@ -1,0 +1,107 @@
+1. write a recursive function to find the biggest element in array:
+
+Sol: what I tried and it was wrong:
+
+
+function biggest(a1){
+const large = -11
+while(a.length ! = 0){
+const element = a1[0]
+if(element > large)
+{
+  large = element
+}
+ a1.pop() --> to remove the last element
+ biggest(a1)
+}
+return large
+}
+
+const b = biggest([1,2,4,5])
+
+Correct solution:
+
+Note: Recursion basics I need to remember:
+
+1. if recursive function needs to produce result we need to return the recursive function
+2. recursion means function calling itself
+3. recursion has the base condition which provides the final result
+
+function biggest(a1,large)
+{
+ if(a1.length === 0)
+{
+  return large;
+}
+ const element = a1.shift()
+ if(element > large) {
+  large = element
+}
+return biggest(a1,large)
+}
+const large = biggest([1,2,3,6,5,12,2],-11)
+console.log("large number:",large)
+
+Note : never use loop in a recursion
+
+2. Remove the duplicates from an array and return it.
+solution:
+
+below is incorrect solution:
+
+function removeDuplicates(a1)
+{
+const elementsTobePopped = []
+ const obj = {}
+ for(let i=0;i< a1.length;i++)
+{
+  if(!obj[a1[i]]) obj[a1[i]] = 1
+  else {
+obj[a[i]]++
+}
+for(let i=0;i<a1.length;i++)
+{
+  if(obj[a1[i]] > 1)
+{
+   elementsToBePopped.push(i)
+}
+}
+const a2 = JSON.parse(JSON.stringify(a1))
+for(let i=0;i<elementsTobePopped.length;i++)
+{
+a2.splice(elementsTobePopped[i],elementsToBePpped.length,elementsTobePopped.length - 1)
+}
+}
+}
+
+Correct solution:
+1. first get the frequencies of numbers
+2. then just show the keys
+
+function removeDuplicates(a1)
+{
+const elementsTobePopped = []
+ const obj = {}
+ for(let i=0;i< a1.length;i++)
+{
+  if(!obj[a1[i]]) { obj[a1[i]] = 1 }
+  else {
+	obj[a[i]]++
+	}
+}
+const unique = Object.keys(obj).map(Number)
+return unique
+}
+
+
+
+
+Note:
+1. arr.shift() method removes the first element from array
+2. arr.pop() removes the last element of array
+3. splice method takes three arguments where first argument is beginning of array , second argument suggests how many elements to be deleted and 
+   third argument shows elements to be added or items to be added
+
+eg: 
+1.arr.splice(2,3) --> meaning starting from position 2 nxt 3 elements will be deleted
+2. arr.splice(2,0,1,2,4) --> meaning items in third argument will be added from position 3

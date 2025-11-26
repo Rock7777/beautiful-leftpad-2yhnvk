@@ -1,0 +1,124 @@
+prep for Accenture interview for role of custom software engineer role
+
+1. // remove duplicates from an array
+
+Solution:
+
+function removeDuplicates(a1)
+{
+    const obj = {}
+    const result = []
+    for(let i=0;i<a1.length;i++)
+    {
+        if(!obj[a1[i]])
+        {
+            obj[a1[i]] = true
+            result.push(a1[i])
+        }
+    }
+    return result
+}
+const b = removeDuplicates([7,7,7,7,1,2,4,23,23,23])
+console.log(b)
+
+Output : [ 7, 1, 2, 4, 23 ]
+
+2. find the maximum and minimum element recursively
+
+Solution: I just used the object to return the min and max element
+
+
+function findMaxAndMin(a1,largest,smallest)
+{
+    if(a1.length === 0) 
+    {
+        return { largest , smallest }
+    }
+    const element = a1.shift()
+    if(element > largest) largest = element;
+    if(element < smallest) smallest = element;
+        
+    return findMaxAndMin(a1,largest,smallest)
+}
+const result = findMaxAndMin([1,3,34,23,18,19,0],-11,12)
+console.log("Max and min:",result.largest, result.smallest)
+
+3. Flatten a nested array without using built-in flat()
+
+Solution: 
+
+flat method is used to flatten the array
+
+eg:
+
+const myArr = [1, 2, [3, [4, 5, 6], 7], 8];
+const a2=myArr.flat(2)
+console.log(a2)
+
+// Output : [1,2,3,4,5,6,7,8]
+flat method doesn't affect the original array
+
+Note: we can use INFINITY as the second argumnent to flatten the array completely barring how many levels the array has
+
+without using flat method:
+
+function flattenArray(a1) { 
+     const arr2 = [] 
+     for(let i=0;i<a1.length;i++) { 
+         if(Array.isArray(a1[i])) { 
+             // console.log(a1[i],i)
+             const flatPart = flattenArray(a1[i]) 
+             //console.log("flatPart:",flatPart)
+             arr2.push(...flatPart) 
+             console.log("arr2-isArray:",arr2)
+             
+         } else { 
+             arr2.push(a1[i]) 
+             console.log("arr2-else:",arr2)
+         } 
+         
+     } 
+     return arr2 
+     
+ } 
+ const flattenedArray = flattenArray([1, 2, [3, [4, 5, 6], 7], 8])
+ console.log("flattenedArray:", flattenedArray) --> [1,2,3,4,5,6,7,8]
+
+4.Rotate an array k positions (left/right)
+
+Sol: rotate an array k positions using left and right
+
+if rotate the array left by k positions mean elements at the start has to move right by k positions
+
+Input: [1,2,3,4,5,6,7] , k = 3
+Output: [4,5,6,7,1,2,3]
+
+const a2 = rotateArrayLeft([1,2,3,4,5,6,7],3)
+console.log("Array2:",a2)
+
+function rotateArrayLeft(a1,k) 
+{
+ k = k%a1.length // handle cases where k is greater than array length
+ return [...a1.slice(k),a1.slice(0,k)]
+}
+
+single solution which shows both array rotateByLeft and arrayrotateByRight
+
+
+
+function rotateArrayLeft(a1,k) 
+{
+    // for cases where k is greater than array length
+    const n = a1.length
+    k = k % a1.length
+ const arrayleftRotate =  [...a1.slice(k),...a1.slice(0,k)]
+ const arrayRightRotate = [...a1.slice(n-k),...a1.slice(0,n-k)]
+ return { arrayleftRotate , arrayRightRotate }
+}
+
+const a2 = rotateArrayLeft([1,2,3,4,5,6,7],3)
+console.log("Result:",a2.arrayleftRotate,a2.arrayRightRotate)
+
+5. find second largest number without sorting
+
+
