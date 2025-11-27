@@ -119,6 +119,183 @@ function rotateArrayLeft(a1,k)
 const a2 = rotateArrayLeft([1,2,3,4,5,6,7],3)
 console.log("Result:",a2.arrayleftRotate,a2.arrayRightRotate)
 
+
+Solution:
+
+best way to sort an array in JS:
+
+const a2 = [2,23,21,123,45]
+console.log(a2.sort((a,b) => a - b)) --> Output: [2,21,24,45,123]
+
+Note: In the above statement : a2.sort((a,b) => a - b) --> generally if we just use sort method like a2.sort()-->
+the sort method converts elements into strings and orders it lexicographically which is wrong , so we use a compare function
+within like a2.sort((a,b) => a - b) --> the compare function inside --> a-b < 0 a comes before b , a-b > 0 b comes before a , if a -b = 0 no change
+
+function findsecondMax(a2)
+{
+ var large = -11
+var secondlarge = -11
+  if(a2.length < 2)
+{
+  return null;
+}
+for(let i=0;i<a2.length;i++) {
+  if(a2[i]>large)
+{
+secondlarge = large
+large = a2[i]
+}
+else if(a2[i]>secondlarge && a2[i]<large)
+{
+  secondlarge = a2[i]
+}
+}
+return secondlarge === -11 ? null : secondlarge
+}
+
+const result = findsecondMax([2,23,21,123,45])
+console.log(result) --> output : 45
+
+6. Find frequency of each element (object/Map).
+
+7.Merge two arrays and remove duplicates.
+
+8.Given two arrays, find intersection.
+
+9.Find the missing number in a sequence.
+
+10.Find pairs that sum to a specific target.
+
+Section 2: String problems
+
+11.Check if string is an anagram.
+
+12.Reverse each word in a sentence.
+
+13.Find longest palindrome substring.
+
+14.Count vowels and consonants.
+
+15.Compress a string (e.g., "aaabbcc" → "a3b2c2").
+
+16.Check if string is rotation of another.
+
+17.First non-repeating character.
+
+18.Remove duplicate characters (preserve order).
+
+Section 3: Recursion Problems
+
+19.Factorial using recursion.
+
+20.Fibonacci using recursion.
+
+21.Sum of digits using recursion.
+
+22.Flatten nested object using recursion.
+
+23.Deep clone an object using recursion.
+
+24.Count nested keys in an object.
+
+section 4: Object / Map / Set Problems
+
+25.Group items by property (e.g., group people by age).
+
+26.Convert object to array and back.
+
+27.Find difference between two objects.
+
+28.Check deep equality between objects.
+
+29.Remove keys with undefined or null values.
+
+
+section 5: Higher-order functions (map, reduce, filter)
+
+30.Implement map() manually.
+
+31.Implement filter() manually.
+
+32.Implement reduce() manually.
+
+33.Use reduce to flatten an array.
+
+34.Use reduce to remove duplicates.
+
+35.Use filter to remove falsy values.
+
+section 6: Promises + Async
+
+Write a function that retries API calls 3 times.
+
+Implement a custom Promise.all().
+
+Implement a custom debounce() function.
+
+Implement a custom throttle() function.
+
+Convert callback-based function into a Promise.
+
+section 7: Logic & System Thinking
+
+LRU Cache implementation.
+
+Rate limiter function.
+
+Memoization function.
+
+Event emitter implementation.
+
+Write your own deepMerge(obj1, obj2)
+
+top 20 recommended qns for Accenture:
+
+If your time is limited, solve these:
+
+Remove duplicates (multiple ways)
+
+Find max element recursively
+
+Flatten nested arrays (no flat)
+
+Implement custom map/filter/reduce
+
+Deep clone object
+
+Deep compare two objects
+
+First non-repeating character
+
+Count element frequency
+
+String compression
+
+Anagram check
+
+Rotate array
+
+Missing number
+
+Pair sum (two-sum)
+
+Debounce & throttle
+
+Promise.all polyfill
+
+Recursive Fibonacci
+
+Remove duplicate characters in string
+
+Reduce-based unique array
+
+Group array of objects by property
+
+Event emitter class
+
+
+
 5. find second largest number without sorting
+
 
 
