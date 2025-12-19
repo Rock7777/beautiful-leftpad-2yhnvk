@@ -1,0 +1,1091 @@
+#ProgressBar code
+import React from 'react';
+import { useState , useEffect } from 'react'
+
+
+function App() {
+  const MAX_ACTIVE = 5;
+  const [activeBars,setActiveBars] = useState([])
+  const [queue,setQueue] = useState([])
+  // #eee --> gray
+  // #4caf50 --> dark moderate lime green
+  const addProgressBar = () =>
+  {
+    if(activeBars.length < MAX_ACTIVE) {
+      startNewBar();
+    }
+    else {
+      // add a placeholder job to queue
+      setQueue((prev)=> [...prev, { id:Date.now() }]);
+    }
+  }
+  const startNewBar = () => {
+    const id = Date.now();
+    setActiveBars((prev)=> [...prev,{id,progress: 1}]);
+  }
+  // handle progress bar animation
+  
+  useEffect(()=>
+  {
+    const timers = activeBars.map((bar,index)=>
+    {
+      if(bar.progress > 100) return null;
+      return setInterval(()=>
+      {
+       setActiveBars(prev => {
+         const updated = [...prev];
+         updated[index].progress += 1;
+         return updated;
+       }) 
+      },30)
+    });
+    
+    return () => timers.forEach((t)=> t && clearInterval(t))
+  },[activeBars])
+  
+  // Remove finished bars
+  
+  useEffect(()=>
+  {
+   const finishedBars = activeBars.filter(b => b.progress >= 100);
+   if(finishedBars.length > 0) {
+     // remove item
+     
+     setActiveBars((prev)=> prev.filter(b=> b.progress < 100));
+     // if  queue has pending bars start the next one 
+      if(queue.length > 0) {
+        setQueue((prev)=>{
+          const next = [...prev];
+          next.shift();
+          return next;
+        })
+        startNewBar();
+      }
+   }
+  },[activeBars,queue])
+  const styles = {
+    progress: {
+      width: "100%",
+      height: 22,
+      background: "#eee",
+      borderRadius: 4,
+      margin:"8px 0",
+      overflow: "hidden",
+    },
+    fill: {
+      height: "100%",
+      background: "#4caf50",
+      transition: "width 0.1s linear",
+    },
+  }
+  
+
+  return (
+    <div style={{padding: 20}}>
+      <button onClick={addProgressBar}>Add Progress</button>
+      <div style={{marginTop: 20, width: 300}}>
+        {activeBars.map((bar)=>
+        {
+          return(
+            <div key={bar.id} style={styles.progress}>
+              <div style={{...styles.fill,
+                width: `${bar.progress}%`,
+              }}
+              />
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default App
+
+  # qns_to_must_know
+
+  definite questions to know and be aware of:
+
+Prep for internal oppurtunity(RC):
+
+questions tat can come:
+
+1. explain differences between var,let and const?
+solution:
+var - function scope  in hoisting variable declared - if tried to access before itself - we get undefined
+let , const - block scope - if tried to access before itself - we et Reference error
+
+2. how do u manage state in React? can u describe difference between locAL component state and global state
+   management(using Redux , context api etc)
+
+Solution: see state is handled using hooks especially in functional components
+
+there is still answer to it , I will add it
+
+3. how do u optimize performance of a react app?
+
+solution: 
+1.making use of lazy loading in order to load multimedia huge files later
+2.making use of useMemo and useCallback when required
+3. making use of pure components(output doesn't change if there is no change in state or props)
+4. making use of fragments bcoz they do not add extra nodes to DOM tree.
+
+
+there is still answer to it , I will add it
+
+
+4. what are advs of using virtual DOM in react?
+
+Sol: main reason why we got to using react is bcoz of virtual dom, it is lightweight copy of actual real dom.
+it makes use of diffing algorithm and makes changes tat have only changed to real DOM avoiding unnecesaary 
+overhead. React maintains two virtual DOM's
+
+5. how do u implement responsive design in web application?
+Solution: by using media queries , need to check later
+
+
+6. wat is difference between class and functional component in react.
+sol: 1. syntax referring to class keyword and function keyword
+     2. use of render in class method and not in functional
+     3. use of this in class component in order to bind functions to constructor which is not needed in 
+        functional component.
+     4. use of hooks in functional components where as we use lifecycle methods like 
+        componentDidMount in class components
+
+7. can u explain concept of hooks in React and give examples of commonly used hooks like useState,useEffect anD
+   useContext?
+
+sol: hooks are functions tat enable us to use life cycle methods in functional components
+   I know all these hooks - so its done
+
+8.wat is purpose of key prop in React?
+
+sol: key is a special attribute which is used to uniquely identify items in lists. 
+it is essential in case of mutating the lists
+
+9. how do u handle form validation in react applns?
+solution: 
+first for the elements like text box we add event handler which makes sure tat we are controlling it
+we can add checks in it like whether input we are receiving from user is matching it or not
+similarly how we make use of onSubmit handler when we submit a form
+
+I need to check the above
+
+10. how do u approach cross-browser compatibility issues with CSS?
+
+solution: I need to check
+
+11. wat are css preprocessors like Sass or LESS, how do they improve ur development workflow?
+
+solution: I need to check
+
+12. wat is flexbox, and how is it different from CSS grid?
+
+solution: 
+.flexbox is one of the layouts how we can design our web appln , the model is we have content
+surrounding it we have padding and then border and then finally margin
+.Using flexbox we can stack elements either horizontally or vertically in grid elements are arranged in forms of
+rows and columns , I need to check on this.
+
+13. can u explain event delegation and its advs in web development?
+solution: event delegation means generally giving control to something else
+        need to check
+                                 
+# 20 definite qns_to_crack_boeing
+
+  definite 20 questions to know to crack for boeing client
+
+I will provide answers only for those which I am not sure of
+
+1. what is virtual DOM and how does it differ from real DOM?
+
+Solution: algorithm used is diffing I know the rest
+
+2. what are React hooks? Can you explain useState and useEffect?
+
+Solution: I know
+
+3. explain the concept of component lifecycle in React. how is it handled
+   in functional components?
+Solution: I know
+
+4.what is React context api? how does it differ from prop drilling?
+
+Solution: Context api provides a way to share data globally across component tree I know
+
+5. what are controlled and uncontrolled components?
+
+Solution: Controlled components are where form data are controlled by react state
+form data is handled by DOM itself - uncontrolled components
+
+6. what are React fragments and who do we use them?
+
+Solution: React fragments are useful when we need to group multiple elements without needing to add extra nodes to DOM.
+they are useful when we need to render multiple elements without addition of extra div's or other html elements which will cause 
+styling issues.
+
+eg for fragment: return(<><h1>Hello!!</h1></>)
+
+7. explain concept of React's key prop in lists? why is it important?
+
+Solution: I know
+
+8. what is difference between useMemo and useCallback?
+Solution: I know
+
+Note: 
+1.in index.js this is how we import App.js
+
+index.js:
+
+import App from './App'
+import {createRoot} from "react-dom/client"
+
+const rootElement = document.getElementById("root")
+const root = createRoot(rootElement)
+
+root.render(<React.StrictMode><App/></React.StrictMode>)
+
+2. what is use of strictmode and why do we need it?
+
+Solution:  strictmode is a wrapper component which only runs in development , it doesn't affect production , it helps you write safe code.
+
+it detects unsafe lifecycle methods like componentWillUpdate , deprecated api's like findDOMnode
+
+9. what are higher order components?
+
+Solution: 
+
+
+10. explain error boundary?
+
+
+
+
+11. what are pure components?
+
+the components which render the same output if the state and props doesn't change , they make unnecessary re-renders not possible.
+they implement shouldComponentUpdate method by default but by doing shallow comparison of state and props , only if the 
+shallow comparison of state and props if there is a change then only re-render occurs which is not case with regular component.
+
+code I am just writing the skeleton
+
+example :
+
+parentcomponent.js
+
+constructor(){
+this.state ={
+name: 'Rock'}}
+
+componentDidMount(){
+setInterval(()=>{
+this.setState({
+name: ''Rock})},2000)
+}
+
+render() {
+console.log('ParentComponent render')
+return(
+<PureComponent1 name={this.state.name}/>
+<Regular Component name={this.state.name}/>
+)
+}
+
+App.js
+
+render()
+{
+  return(
+  <ParentComponent/>
+)
+}
+
+PureComponent1.js
+
+class PureComponent1 extends PureComponent{
+render() {
+console.log('PureComponent render')
+return(
+<h1>Pure - {this.props.name}</h1>
+)
+}
+}
+
+RegularComponent.js
+
+class  RegularComponent extends React.Component{
+render() {
+console.log('RegularComponent render')
+return(
+<h1>Regular - {this.props.name}</h1>
+)
+}
+}
+
+As u can see above the name is not changed after every 2 sec in parent component but after 2 sec
+we will see in console log both stmts from parent and Regular component but from Pure as it does a shallow comparison of
+props and state and sees tat there is no change and hence re-rendering will not occur
+
+Node js definite must know 20 qns?
+
+Very very important:
+
+find the closest element to zero from array : a1=[-4,-2,1,4,2]
+
+Solution:
+
+closest element to zero means whose absolute value is smallest
+
+
+
+const a1=[-4,-2,1,4,2,-1]
+let closest = a1[0]
+for(let i=0;i<a1.length;i++) {
+    if(Math.abs(a1[i]) < Math.abs(closest) 
+      || (Math.abs(a1[i] === Math.abs(closest) && a1[i] > closest)))
+    {
+        closest = a1[i]
+    }
+}
+
+// Rule is if two numbers are closest to zero choose the positive one
+console.log(closest)
+
+
+# definite_interview_crack
+
+1.function returns an object in jest how can we write test cases in jest
+
+Solution:
+
+
+getUserData.js:
+
+const getUserData = (id)=>
+{
+  if(id === 1) {
+  return {userId: 1, name:"Rock1", info:"Rock1 info"}
+}
+else if(id === 2) {
+  return {userId: 2, name:"Rock2", info:"Rock2 info"}
+}
+else {
+  return {userId: null, name:null, info:null}
+}
+}
+
+export default getUserData
+
+getUserData.test.js
+
+import {getUserData} from "./getUserData"
+
+describe("getUserData",()=>
+{
+  it("should return correct user object userId 1",()=>
+{
+  const result = getUserData(1)
+  expect(result).toEqual({userId: 1, name:"Rock1", info:"Rock1 info"})
+});
+
+it("should display the correct info for id 2",()=>
+{
+  const result = getUserData(2)
+  expect(result).toEqual({userId: 2, name:"Rock2", info:"Rock2 info"});
+});
+
+it("should display the null for unspecified id",()=>
+{
+  const result = getUserData(3)
+  expect(result).toEqual({userId: null, name:null, info:null});
+});
+})
+
+
+
+if jest not installed , npm install --save-dev jest
+
+in package.json --> "scripts" : {"test" : "jest"}
+
+run : npm test
+  
+
+2. write code for pagination in react js and by default it should load a page and onclick of particular page it 
+   has to show 5 records pertaining to tat page and it should have next and previous button 
+
+
+Solution:
+
+onLoad - it has to by default show the mentioned no.of records in tat page , by default
+it should be page 1
+on navigating to different page data should be loaded dynamically
+
+// Hardcoded array of 25 fruit names
+const fruits = [
+    "Apple",
+    "Banana",
+    "Mango",
+    "Orange",
+    "Pineapple",
+    "Grapes",
+    "Watermelon",
+    "Papaya",
+    "Strawberry",
+    "Blueberry",
+    "Raspberry",
+    "Blackberry",
+    "Cherry",
+    "Peach",
+    "Pear",
+    "Plum",
+    "Kiwi",
+    "Pomegranate",
+    "Guava",
+    "Lychee",
+    "Apricot",
+    "Cantaloupe",
+    "Dragonfruit",
+    "Fig",
+    "Coconut"
+];
+
+console.log(fruits);
+
+// Solution:
+
+// Hardcoded array of 25 fruit names
+
+import React,{useEffect,useState} from "react";
+
+const App = () =>
+{
+  const fruits = [
+    "Apple",
+    "Banana",
+    "Mango",
+    "Orange",
+    "Pineapple",
+    "Grapes",
+    "Watermelon",
+    "Papaya",
+    "Strawberry",
+    "Blueberry",
+    "Raspberry",
+    "Blackberry",
+    "Cherry",
+    "Peach",
+    "Pear",
+    "Plum",
+    "Kiwi",
+    "Pomegranate",
+    "Guava",
+    "Lychee",
+    "Apricot",
+    "Cantaloupe",
+    "Dragonfruit",
+    "Fig",
+    "Coconut"
+];
+const recordsPerPage = 5;
+const numberOfPages = fruits.length / recordsPerPage 
+const [currentPage,setCurrentPage] = useState(1)
+const [pageItems,setPageItems] = useState([])
+// indexes - 0 , 5 , 10 , 15 , 20
+const handlePageChange = (pageNumber) =>
+{
+  if(pageNumber >=1 && pageNumber <=numberOfPages)
+  {
+    setCurrentPage(pageNumber)
+  }
+}
+useEffect(()=>
+{
+  const initialIndex = (currentPage - 1) * recordsPerPage
+  const lastIndex = initialIndex + recordsPerPage
+  setPageItems(fruits.slice(initialIndex,lastIndex))
+},[currentPage])
+const pageNumbers = []
+for(let i=1;i<=recordsPerPage;i++) {
+  pageNumbers.push(i)
+}
+return(<div>
+    {pageItems.map((page,index)=>
+    {
+      return (
+      <li key={index}>
+        {page}
+      </li>)
+    })}
+  <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === recordsPerPage}>Next</button>
+  <button onClick={() => handlePageChange(currentPage - 1)} 
+  disabled = {currentPage === 1}>Previous</button>
+  {pageNumbers.map((page,index)=>
+  {
+    return(
+      <button onClick={()=>handlePageChange(page)}
+      disabled = {currentPage === index + 1}
+      key={index}>
+        {page}
+      </button>)
+  })
+  }
+  </div>)
+}
+
+export default App;
+
+
+
+
+
+3.how to reverse an array without using reverse method
+
+Solution:
+
+const s1 = "Rakesh earns 1cr"
+const a1 = s1.split(" ")
+console.log("array",a1)
+let reversedArray = []
+for(let i=a1.length-1;i>=0;i--)
+{
+    console.log(a1[i])
+    reversedArray.push(a1[i])
+}
+const a2 = reversedArray.join(" ")
+console.log("a2:",a2) // 1cr earns Rakesh
+
+
+4.in typescript how do we write result of three numbers
+  
+Sol: function sum(num1:number,num2:number,num3:number) : number {
+    return num1 + num2 + num3
+}
+
+const p2 = sum(10,3,4)
+console.log("Sum:",p2)
+
+// Output: Sum: 17
+
+Important Note : 
+
+In typescript we define types to function arguments or return type explicitly like above for a function
+
+
+
+5.how to reverse words in an array from string
+
+Sol: 
+
+using reverse method in javascript reversing order of words
+
+const s1 = "Rakesh earns 1cr"
+const a1=s1.split(" ")
+console.log("Array:",a1.reverse().join(' ')) // --> 1cr earns Rakesh
+// reverse method can be used only on entire array not on 
+// individual elements in ar
+
+Imp Note: trim() method is used to remove empty spaces on both sides of the string
+it can be used only on string variables or objects
+ 
+ diff between string literal and string variable
+
+console.log("Hello World"); // Directly used 
+above hello world is string literal
+
+// String variable
+let greeting = "Hello World"; // Assigned from a literal --> string variable can have value from
+literal, user input or some computation and string variable can be changed as shown below
+
+console.log(greeting);
+
+// Changing variable value
+greeting = "Hi there!";
+console.log(greeting);
+
+// without using reverse method in javascript reversing order of words
+
+Solution:
+
+const s1 = "Rakesh earns 1cr"
+const a1 = s1.split(" ")
+console.log("array",a1)
+let reversedArray = []
+for(let i=a1.length-1;i>=0;i--)
+{
+    console.log(a1[i])
+    reversedArray.push(a1[i])
+}
+const a2 = reversedArray.join(" ")
+console.log("a2:",a2) // 1cr earns Rakesh
+
+
+
+
+6.useReducer hook
+
+ it is also one of the hooks for state management along with useState hook when we have a complex state
+to maintain we prefer useReducer 
+
+below I have given a simple example lets add the complex example later
+
+App.js
+
+import React from 'react';
+import { useState, useReducer } from 'react'
+
+function App() {
+  // const [count, setCount] = useState(0)
+  const INCREMENT = "Increment"
+  const reducer = (state,action) =>
+  {
+    switch(action.type)
+    {
+      case INCREMENT:
+      return {count: state.count + 1}
+      default:
+      return state
+    }
+  }
+  const initialState = {count : 0}
+  const [state,dispatch]=useReducer(reducer,initialState)
+  
+  const handleIncrement = () =>
+  {
+    dispatch({type: INCREMENT})
+  }
+
+  return (
+    <div>
+      <h1>Hello, World!</h1>
+      <div>
+        <button onClick={handleIncrement}>
+          count {state.count}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default App
+
+
+7.how to insert elements in between indexes of an array
+
+Sol: basically to insert elements in between using indexes we make use of splice method
+  which has three arguments first argument takes in the position where element needs to be inserted,
+  next argument takes the count of number of elements to be deleted from tat position if it is 0 , then
+  no element gets deleted finally last argument contains the value to be inserted.
+
+  splice method affects original array 
+
+  example code:
+
+   const a1= [1,2,4,5,6]
+   to insert element between 4 and 5 ,
+   a1.splice(3,0,6) => this means since I want to insert an element between 4 and 5,
+   the first argument is 3 indicating tat element has to be inserted at index 3 and tat element is 6 which is
+   the third argument, the second argument being zero indicates tat no elements needs to be deleted
+
+   console.log(a1) // => Output --> [1,2,4,6,5,6]
+
+learn about splice and slice method with examples ?
+
+8.what are pseudo elements and pseudo classes
+
+Solution: pseudo classes help us to add style to state of an element like for example a:hover , a:visited
+here : is the syntax for pseudo classes where as pseudo elements style specific part of an element
+
+for eg:
+ 
+.p::first-line {
+	
+}
+
+it means we apply style only to the first line of paragraph element and the syntax is ::
+
+we can combine both pseduo classes and pseudo elements
+
+
+eg: p:first-child::first-line {
+font-weight: bold;
+}
+
+
+9.what are combinators
+
+Sol: combinators in css define the relationship b/w two or more selectors
+     allowing to target and style the elements based on their position in HTML structure.
+
+ types:
+1. descendant combinator
+    
+   div p{
+   color: green; // style all the paragraph elements which are the descendants of  div
+}
+
+2. child combinator
+
+   div > p{
+    color: blue; // style only the p elements which are direct children of div
+}
+
+3. adjacent sibling combinator
+
+   h1 + p {
+   font-weight: bold; // styles only the first p which is right after an h1 meaning 
+                     // once h1 tag closes and with the same parent
+}
+
+4. general sibling combinator
+
+
+   h1 ~ p{
+   color: yellow; // styles all the p elments which are the next siblings of specified element
+   //  and share the same parent
+}
+
+// finally develop a todo app keep doing it for 5 days continously at the end
+
+ 
+# definite_interview_crack_2
+
+// get answers for left out things below start from question 5
+
+first learn scss
+  
+  1. css modules
+  2. styled components
+  3. I need to learn styles in scss. what is mixin.
+  4. tailwind css - I can learn later
+  3. cross site scripting
+
+  4. what is shallow copy and deep copy
+     shallow copy - it copies only first level of object , nested objects within tat are still referenced
+	 deep copy - it copies all the levels , it is completely independent of original
+	 
+	 example of shallow copy - 
+	 
+	 const person = {
+  name: "Alice",
+  address: { city: "New York", zip: 10001 }
+};
+
+// Shallow copy using spread operator
+const shallowCopy = { ...person };
+
+shallowCopy.name = "Bob"; // changes only the copy
+shallowCopy.address.city = "Los Angeles"; // affects BOTH!
+
+console.log(person.address.city); // Los angeles
+	 
+	 
+	 example of deep copy - 
+	 
+	 const person = {
+  name: "Alice",
+  address: { city: "New York", zip: 10001 }
+};
+
+// Deep copy  (modern JS)
+const deepCopy = JSON.parse(JSON.stringify(person));
+
+deepCopy.name = "Bob";
+deepCopy.address.city = "Los Angeles";
+
+console.log(person.address.city); // "New York" ✅
+
+
+  5. build a UI where on click of button it shows progress building from 1% to 100%
+  below I have something called queue progress bar - with count value set to 0
+  on click of 5 times it shows 5 progress bars
+  on click of 6 nothing happens initially after first one disappears only then the 6th one starts
+  
+  6. learn about middleware in redux - sagas and thunk and when they are used
+  7. what is use of mixin in scss
+
+  8. what is pure function in JS?
+
+     1. no matter how many times you call the function if the same input is passed then the output should remain same
+	 2. it has no side effects - what is side effect?
+	 
+	 example of pure function -
+	 
+	 function add(a,b) {
+	   return a + b
+	 }
+	 
+	 
+	 add(5,3)
+	 add(5,3)
+
+
+  # definite_interview_crack_50_qns
+    definite 50 qns to learn in React
+
+1. What is React
+
+Solution:
+ React is a JS library created by fb for building UI's
+
+ 2. What is useMemo ?
+
+Solution: 
+useMemo is hook used to memoize certain expensive cALculations so tat performance is optimized
+
+example :
+
+import React,{useState} from 'react'
+
+const App = () =>
+{
+  const [counterOne,setCounterOne] = useState(0);
+const [counterTwo,setCounterTwo] = useState(0);
+const isEven = () =>
+{
+while(i<2000000000) i++
+ return counterOne % 2 === 0 
+}
+return(
+<div>
+<button onClick={()=>setCounterOne(counterOne + 1)}>Counter1 - {counterOne}</button>
+<span>{isEven() ? 'Even' : 'Odd'}</span>
+<button onClick={()=>setCounterTwo(counterTwo + 1)}>Counter2 - {counterTwo}</button>
+</div>
+)
+}
+
+export default App;
+
+first with the above code on click of counterone button , counter1 increments slowly
+bcoz of the time taking expensive calculation it is valid only but on click of counterTwo
+button also there will be time delay in incrementation of counter two it is bcoz each time
+counterTwo is pressed value changes and re-rendering happens and each time isEven is executed
+tat's why the delay to solve it we use useMemo where we cache the result and cause re-render
+only when there is change in state variable
+
+below is the proper solution with optimization using useMemo
+
+import React,{useState,useMemo} from 'react'
+
+const App = () =>
+{
+  const [counterOne,setCounterOne] = useState(0);
+const [counterTwo,setCounterTwo] = useState(0);
+const isEven = useMemo(() =>
+{
+while(i<2000000000) i++
+ return counterOne % 2 === 0 
+},[counterOne])
+return(
+<div>
+<button onClick={()=>setCounterOne(counterOne + 1)}>Counter1 - {counterOne}</button>
+<span>{isEven ? 'Even' : 'Odd'}</span>
+<button onClick={()=>setCounterTwo(counterTwo + 1)}>Counter2 - {counterTwo}</button>
+</div>
+)
+}
+
+export default App;
+
+with the above solution the performance is improved
+
+
+ 
+
+export default App;
+
+
+ 3. What are the features of React ?
+
+  Solution:
+
+ 1. Virtual DOM - react maintains a lightweight copy of actual DOM and actually
+    updates the virtual DOM and only then necessary changes or required changes
+    get updated in real DOM(this process is called reconciliation)
+ 2. Component based architecture
+ 3. state management
+ 4. JSX
+ 5. hooks and life cycle methods 
+ 
+ 4. What is JSX ?
+
+Solution:
+It is a syntax used in React which is combination of JS and HTML. it is introduced as part of ES6
+
+ 5. What is DOM ?
+Solution:
+
+DOM represents structure of webpage and we can view it as tree of nodes
+
+   this holds the UI 
+ 6. What is Virtual Dom ?
+
+Solution:
+ 
+react maintains a lightweight copy of actual DOM and actually
+    updates the virtual DOM and only then necessary changes or required changes
+    get updated in real DOM(this process is called reconciliation)
+
+ 7. What is component life cycle of React class component ?
+
+Solution:
+
+each component in its life cycle goes through 1. Mounting , 2.Updating and 3. Unmounting
+
+and we have life cycle methods associated with it
+ 8. What are fragments in react ?
+  
+ 9. What are props in react ?
+Solution:
+Props are objects and they are like arguments which
+we pass to function , they are passed from child to parent and vice versa
+ 10. What are synthetic events in react ?
+ 11. What are the difference between Package.json and Package.lock.json ?
+ 12. What are the differences between client side and server side rendering ?
+ 13. What is state in Reactjs?
+ 14. What are props ?
+ 15. What are the differences between State and Props in react ?
+ 16. What is props drilling ?
+ 17. What are the disadvantages of props drilling and How we can avoid props drilling ?
+ 18. What are Pure components in React ?
+ 19. Whatare Ref’s in React?
+ 20. What is meant by forward ref ?
+ 21. What are Error boundaries ?
+ 22. What are Higher order components in react ?
+ 23. What are the differences between controlled and uncontrolled components ? 
+ 24. What is useCallback ?
+ 25. What are the differences between useMemo and useCallback ?
+ 26. What are keys in React ?
+ 27. What is Lazy loading in React ?
+ 28. What is suspense in React ?
+ 29. What are custom hooks ?
+ 30. What is useReducer hook ?
+ 31. What are Portals in react ?
+ 32. What is context in react ?
+ 33. Practical question: Give an example of context api usage ?
+ 34. What is the purpose of callback function as an argument of setState()?
+ 35. Practical question: create a custom hook for increment/decrement counter ?
+ 36. Which lifecycle hooks in class component are replaced with useEffect in functional components ?
+ 37. What is Strict mode in react ?
+ 38. What are the different ways to pass data from child component to parent component in react ?
+ 39. Practical question: How to send data from child to parent using callback functions ?
+ 40. Practical question: How to send the data from child component to parent using useRef ?
+ 41. How do you optimize your react application ?
+ 42. How would you consume a RESTful JSON API in reactjs?
+ 43.different design patterns used in react?
+ 44. context api vs redux
+ 45. prop types in react(How to apply validation on props in react)
+ 46. What are React Mixins ?
+ 47. what are the different hooks you have used ?
+ 48. What are render props in react ?
+ 49. What are the different types of exports and imports ?
+ 50. What are the differences between create element vs clone element in react ?
+ 51. When to use useState and useReducer?
+ 52. What are protected routes in react ?
+ 53. What is react-router has context menu
+
+
+# Top 30 API integration questions and answers
+
+Top 30 API integration questions and answers
+
+1. how do you automate and integrate APIs?
+
+to automate API's we make use of scripting languages like JS
+
+
+html structure:
+
+1. html defines the structure of web page
+
+ the below is a simple html document
+
+<!DOCTYPE html>
+<html>
+    <head>
+	<title> Web Page </tilte>
+		<a href="file.css"/>
+   </head>
+<body>
+  <h1>Work on it</h1>
+</body>
+</html>
+
+
+2. what does meta tag do in html?
+
+eg: <meta charset = "UTF-8">
+    <meta name = "viewport" content = ",initial-scale = 1.0">
+    <meta name = "description" content = "A website about web development">
+
+# accordion
+
+Accordion code - 
+
+import React from 'react';
+import { useState } from 'react'
+
+function App() {
+  const accordionData = [{
+    userId:1,
+    header: 'Accordion 1',
+    description: 'Text from Accordion 1'
+  },
+  {
+    userId:2,
+    header: 'Accordion 2',
+    description: 'Text from Accordion 2'
+  },
+  {
+    userId:3,
+    header: 'Accordion 3',
+    description: 'Text from Accordion 3'
+  }]
+  const [activeIndex,setActiveIndex] = useState(null)
+  const styles = {
+    accordion-container: {},
+    accordion: {},
+    accordion-header: {},
+    accordion-body: {},
+    
+  };
+  
+  const handleClick = (index) =>
+  {
+    setActiveIndex(activeIndex === index ? null : index)
+  }
+  
+  return (
+    <div className="accordion-container">
+      <h1>Hello, World!</h1>
+        {accordionData.map((accordion,index)=>
+        {
+        return(
+        <div className="accordion">
+          <div key={accordion.userId} 
+            className = ""accordion-header 
+            onClick={()=>handleClick(index)}>
+            {accordion.header}
+          </div>
+          {activeIndex === index && (
+          <div className = "accordion-body">
+            {accordion.description}
+          </div>)}
+        </div>)
+        })}
+      </div>
+  )
+}
+
+export default App
+
+
+
+
+
+
+
+
+
+
