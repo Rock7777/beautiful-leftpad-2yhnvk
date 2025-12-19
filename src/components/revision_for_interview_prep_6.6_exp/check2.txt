@@ -1,1 +1,1492 @@
-check2
+#check2
+
+9. Interview-prep_9
+
+Debouncing and Throttling:
+
+these are two ways to optimize event handling in JS.
+
+debouncing - real world example any e-commerce appln or website eg: flipkart when we type something and wait for few ms  we get tat
+product in suggestion , this is called debouncing , it makes sure tat api call's are hit only when needed so it minimizes event
+propagation
+
+Throttling  - real world eg: Twitter when we r scrolling api call's are made only after certain limit(delay) though we are scrolling continuosly
+only after certain function api is called and then we are fed with new posts. It limits the execution of function for every scroll.(oher eg:
+resizing)
+
+Difference is throttling limits the execution of event handler function when event is triggered continuosly or api where as debouncing means tat function is executed after a certain amount of time.
+
+Impt pt: To make use of loadash library , go to loadash debounce and copy the cdn and then paste it in html file to make use of it.
+
+loadash implementation of debounce after putting the cdn in html file in js file
+
+const debouncedCount = _.debounce(()=>
+{
+	triggerCount+=1;
+	count.innerHTML = triggerCount;
+},800);
+
+Q1: Create a button UI and add debounce as follow =>
+--> Show "Button Pressed <x> Times" every time button is pressed
+--> Increase "Triggered <Y> Times" count after 800ms of debounce ==> for this we can create our own functionality for debounce or we can use loadash
+from library --> I am putting both ways below.
+
+html file:
+
+<html>
+    <body>
+        <button id="btn1">Increment</button>
+        <p>Button pressed <span id="increment_pressed">0</span> Times</p>
+        <p>Triggered <span id="increment_count">0</span> Times</p>
+        <script src="index.js"></script>
+    </body>
+</html>
+
+index.js 
+
+const btn = document.getElementById("btn1");
+const btnPress = document.getElementById("increment_pressed");
+const count = document.getElementById("increment_count");
+
+var pressedCount = 0;
+var triggerCount = 0;
+
+const myDeBounce = (cb,d) => {
+    let timer;
+    return function (...args) {
+        if(timer) clearTimeout(timer);
+        timer = setTimeout(()=> 
+        {
+           cb(...args); 
+        },d);
+    }
+};
+const debouncedCount = myDeBounce(() =>
+{
+    triggerCount+=1;
+    count.innerHTML = triggerCount;
+},800);
+btn.addEventListener('click',()=>
+{
+    btnPress.innerHTML = ++pressedCount;
+    debouncedCount();
+})
+
+
+
+
+
+Q2:  Create a button UI and add throttle as follow =>
+--> Show "Button Pressed <x> Times" every time button is pressed
+--> Increase "Triggered <Y> Times" count every 800ms of throttle ==> for this we can create our own functionality for debounce or we can use loadash
+from library --> I am putting both ways below.
+
+
+html file:
+
+const myDeBounce = (cb,d) => {
+    let timer;
+    return function (...args) {
+        if(timer) clearTimeout(timer);
+        timer = setTimeout(()=> 
+        {
+           cb(...args); 
+        },d);
+    }
+};
+
+
+index.js:
+
+
+var pressedCount = 0;
+var triggerCount = 0;
+
+const myThrottle = (cb,d) => {
+    let last=0;
+    return function (...args) {
+        let now = new Date().getTime();
+        if(now - last < d) return;
+        last = now;
+        return cb(...args);
+    }
+};
+const throttledCount = myThrottle(() =>
+{
+    triggerCount+=1;
+    count.innerHTML = triggerCount;
+},800);
+btn.addEventListener('click',()=>
+{
+    btnPress.innerHTML = ++pressedCount;
+    throttledCount();
+})
+
+10. Interview_prep_10
+
+this skill I need to improve completely: Strong proficiency in JavaScript, including DOM manipulation and the JavaScript object model
+
+Event propagation:
+
+1. what is event propagation?
+
+deciding sequence of execution of events is event propagation
+
+2.event bubbling - event propagation from child to parent
+
+there are some events which won't bubble - focus , blur(need to google abt them)
+
+eg:
+
+html file:
+
+<html>
+    <body>
+        <div id="div1">
+            DIV
+            <form action="" id="form1">
+                FORM
+                <button id="btn1">BUTTON</button>
+            </form>
+        </div>
+    </body>
+
+</html>
+
+js file:
+
+const btn = document.getElementById("btn1");
+const form_el = document.getElementById("form1");
+const div_el = document.getElementById("div1");
+
+div_el.addEventListener('click',function(){
+    alert('In div');
+});
+form_el.addEventListener('click',function(){
+    alert('In form');
+});
+btn.addEventListener('click',function(){
+    alert('In Button');
+});
+
+so now when we click on button , first alert box of btn opens up then form and then div. this is event bubbling(bottom to up). there is way to make
+sure only button event gets fired will see below.
+
+
+Q3. event.target vs this.target vs event.currentTarget --> this one event.currentTarget functions for eg: if it is  event bubbling then on click
+it functions that way
+
+take the above eg: on click of btn and we use event.currentTarget.tagName --> initially it would print out button,form and then div.
+but if we use event.target , we get button , button , button bcoz origin of target is button
+
+this.tagName will print button , form and div bcoz this points to object it is being called on so the output is mentioned order.
+
+Q4. what is event capturing/trickling?
+
+By default event bubbling occurs , event capturing means event propagation flows from top to bottom(on click --> we get div,form and then button)
+
+for event capturing to work we need to make this change in js file:
+
+const btn = document.getElementById("btn1");
+const form_el = document.getElementById("form1");
+const div_el = document.getElementById("div1");
+
+div_el.addEventListener('click',function(){
+    alert('In div');
+},
+{
+	capture:true,
+});
+form_el.addEventListener('click',function(){
+    alert('In form');
+},{
+	capture:true,
+});
+btn.addEventListener('click',function(){
+    alert('In Button');
+},{
+	capture:true,
+});
+
+
+Q5. how to stop event bubbling or event capturing?
+
+the way of achieving it is using stop propagation
+
+js file:
+
+const btn = document.getElementById("btn1");
+const form_el = document.getElementById("form1");
+const div_el = document.getElementById("div1");
+
+div_el.addEventListener('click',function(e){
+	e.stopPropagation();
+    alert('In div');
+});
+form_el.addEventListener('click',function(e){
+	e.stopPropagation();
+    alert('In form');
+});
+btn.addEventListener('click',function(e){
+	e.stopPropagation();
+    alert('In Button');
+});
+
+so now with stopPropagation on click of button only button alert box will be shown.
+
+If we want the event to propagate to  button and form , but not propagate to div , then add stopPropagation only in form so tat event will
+not propagate to div.
+
+Q6. what is event delegation? // most asked
+
+for eg : in html file we have
+
+<div className="products">
+            <span className="mobile">Mobile</span>
+            <span className="laptop">Laptop</span>
+            <span className="tripod">Tripod</span>
+        <span className="USB">USB</span>
+            <span className="mobile">Mobile</span>
+        </div>
+		
+		within body tag
+
+we will have event listener for the parent which is div onclick of mobile will route to mobile page and so on
+
+document.querySelector("products").addEventListener("click",function(event) {
+// to check for closest tag for eg if we have mobile within <b> tag , then we can check event.target.closest("SPAN");
+	if(event.target.tagName === "SPAN") {
+	window.location.href + = "/" + event.target.className;
+	}
+})
+
+so with above code on click of mobile we go to mobile page similarly and so on (of course those pages don't exist but we can see url
+change in address bar)
+
+Question 6:
+
+Output question:
+
+const btn = document.getElementById("btn1");
+const form_el = document.getElementById("form1");
+const div_el = document.getElementById("div1");
+
+div_el.addEventListener('click',function(){
+    alert('In div');
+});
+form_el.addEventListener('click',function(){
+    alert('In form');
+});
+btn.addEventListener('click',function(){
+    alert('In Button');
+});
+
+first event should fire at form then to button and then to div on click of button
+
+simple just add capture to form and we get soln
+
+div_el.addEventListener('click',function(e){
+    alert('In div');
+});
+form_el.addEventListener('click',function(e){
+    alert('In form');
+},{capture:true,});
+btn.addEventListener('click',function(e){
+    alert('In Button');
+});
+
+Q8: Create a modal which closes when clicking on negative space (tryout this in vs code tmrw)
+
+q9: create a navbar (check this both tomorrow mrng)
+
+
+
+
+
+
+
+Try out: try out this code in vs code and see once
+
+11. Interview_prep-11
+
+Promises:
+
+Promise is Asynchronous code.
+
+Synchronus vs Asynchrounous code
+
+JS is single threaded language
+
+eg. for ASYNCHRONOUS CODE
+
+console.log("Start");
+
+setTimeout(()=> {
+    console.log("mid");
+},0);
+
+
+console.log("end");
+
+the output will be start end mid (since JS executes synchronous code first and then asynchronous code)
+
+Eg: 2 for Asynchronous code:
+
+console.log("Start");
+
+function importantAction(uname)
+{
+setTimeout(()=> {
+    return `Subscribe to ${uname}`;
+},1000);
+}
+
+const msg = importantAction("Rakesh");
+console.log("Msg:",msg);
+
+console.log("end");
+
+the output would be start Msg:undefined and end , this happens since JS executes only synchronous code first as mentioned above since in the
+function there is setTimeout tat becomes a asynchronous code hence the returned value will be undefined(it means setTimeout will not be executed)
+
+In order to solve this issue we have callbacks:
+
+Callback: It is a  function which is passed as an argument to other function and gets executed at a certain point in time
+
+eg: after using callback function:
+
+console.log("start");
+function print(uname,cb) {
+    setTimeout(()=> {
+        cb(uname);
+    },1000);
+}
+const a = print("Rakesh",(msg)=>{
+    console.log(msg);
+});
+
+console.log("end"); // It would print start end Rakesh 
+
+Another eg : for asynchronous code
+
+console.log("Start");
+
+function importantAction(uname,cb)
+{
+setTimeout(()=> {
+    cb(`Subscribe to ${uname}`);
+},1000);
+}
+
+function likeit(msg,cb) {
+    setTimeout(()=> {
+    cb(`Print this msg:${msg}`);
+},0);
+}
+
+const msg = importantAction("Rakesh",(uname)=> {
+    console.log(uname);
+    likeit("Namaste",(msg)=>
+    {
+        console.log(msg);
+    })
+});
+
+
+console.log("end");
+
+Output: 
+Start
+end
+Subscribe to Rakesh
+Print this msg:Namaste
+
+Callback hell: having many nested callbacks within is callback hell , to solve it we need promises.
+
+// Promise eg:
+
+it represents success or failure of an asynchronous task
+
+
+console.log("start");
+
+const sub = new Promise((resolve,reject)=> {
+    setTimeout(()=> {
+       const result = true;
+       if(result) resolve("Work hard!!!");
+       else reject(new Error("Work more hard!!!"));
+    },2000);
+});
+
+sub.then((res)=> {
+    console.log(res);
+}).catch((err)=> {
+    console.log(err);
+});
+
+console.log("end");
+
+Output: start end Work hard!!!
+
+To solve callback hell , we normally return promises with reture new Promise code and do the normal thing of using then and catch but that is also
+like promise hell , we can solve it with promise chaining
+
+Perfect eg: of callback hell:
+
+console.log("Start");
+
+function importantAction(uname,cb)
+{
+setTimeout(()=> {
+    cb(`Subscribe to ${uname}`);
+},1000);
+}
+
+function likeit(msg,cb) {
+    setTimeout(()=> {
+    cb(`Print this msg:${msg}`);
+},0);
+}
+
+function  doSomething(title,cb) {
+    setTimeout(()=>
+    {
+        cb(`Do something: ${title}`);
+    },1000);
+}
+
+const msg = importantAction("Rakesh",(uname)=> {
+    console.log(uname);
+    likeit("Namaste",(msg)=>
+    {
+        console.log(msg);
+    })
+    doSomething("Rakesh",(msg)=>
+    {
+        console.log(msg);
+    })
+});
+
+
+console.log("end");
+
+Output : 
+Start
+end
+Subscribe to Rakesh
+Print this msg:Namaste
+Do something: Rakesh
+
+To solve the above code which has callback hell we can use promise which creates a promise hell
+
+something like below : To solve it one of the approaches is promise chaining
+
+console.log("Start");
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },1000);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(`this is ${msg}`);
+        },1000);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+   
+
+
+const msg = importantAction("Rakesh").then((res)=> {
+    console.log("Res:",res);
+    likeit("Me").then((res)=> {
+        console.log(res);
+    }).catch((err)=> {
+        console.log(err);
+    })
+    doSomething("Hogwarts").then((res)=> {
+        console.log(res);
+    }).catch((err)=> {
+        console.log(err);
+    })
+}).catch((err)=> {
+    console.log(err);
+})
+
+
+
+
+console.log("end");
+
+Output : 
+
+Start
+end
+Res: Rakesh
+this is Me
+Fly to Hogwarts
+
+Promise chaining:
+
+the change comes in call only:
+
+const msg = importantAction("Rakesh").then((res)=> {
+    console.log("Res:",res);
+    return likeit("Me")
+}).then((res)=> {
+    console.log(res);
+    return doSomething("Hogwarts");
+}).then((res)=> {
+    console.log(res);
+}).catch((err) => {
+    console.log(err);
+})
+
+
+the above Promise chaining is also a lengthy way in order to make it shorter we can use Promise combinators
+
+Promise combinator : they help us to execute more than one promise at one time and return result accordingly.
+
+four types of Promise combinator:
+1.Promise.all : it runs all promises in parallel and returns an array of fulfilled promises , if there is error in any one of the promise , then 
+promise.all returns error or it fails
+
+eg:
+
+console.log("Start");
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },1000);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(`this is ${msg}`);
+        },1000);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+   
+
+Promise.all([
+importantAction("Rakesh"),
+likeit("Me"),
+doSomething("Hogwarts"), 
+]).then((res)=> {
+    console.log(res);
+}).catch((err)=> {
+    console.log(err);
+})
+
+console.log("end");
+
+Output: 
+Start
+end
+[ 'Rakesh', 'this is Me', 'Fly to Hogwarts' ]
+
+In case of Promise.all if any promise is failed , then output will be like this:
+
+Start
+end
+ERROR!
+Error: Promise failed: Rakesh(means I have added reject in uname)
+
+Promise.race():
+
+so this one returns only the first fulfilled or failure promise
+
+for eg: 
+
+console.log("Start");
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },1000);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(`this is ${msg}`);
+        },1000);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+   
+
+Promise.race([
+importantAction("Rakesh"),
+likeit("Me"),
+doSomething("Hogwarts"), 
+]).then((res)=> {
+    console.log(res);
+}).catch((err)=> {
+    console.log(err);
+})
+console.log("end");
+
+Output will be : start end Rakesh
+
+in this case:
+
+console.log("Start");
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },1000);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(`this is ${msg}`);
+        },1000);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },0); 
+    })
+}
+   
+
+Promise.race([
+importantAction("Rakesh"),
+likeit("Me"),
+doSomething("Hogwarts"), 
+]).then((res)=> {
+    console.log(res);
+}).catch((err)=> {
+    console.log(err);
+})
+console.log("end");
+
+Output will be : start end Fly to Hogwarts
+
+In this case if there is an error:
+
+console.log("Start");
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },1000);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        reject(`this is ${msg}`);
+        },100);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+   
+
+Promise.race([
+importantAction("Rakesh"),
+likeit("Me"),
+doSomething("Hogwarts"), 
+]).then((res)=> {
+    console.log(res);
+}).catch((err)=> {
+    console.log('Error: Promise failed:',err);
+})
+console.log("end");
+
+Output will be : 
+Start
+end
+ERROR!
+Error: Promise failed: this is Me
+
+Promise.allSettled() method:
+
+this method if anything failed also it will return all promises as an array
+
+eg:
+
+console.log("Start");
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        reject(uname);
+        },100);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        reject(`this is ${msg}`);
+        },100);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+   
+
+Promise.allSettled([
+importantAction("Rakesh"),
+likeit("Me"),
+doSomething("Hogwarts"), 
+]).then((res)=> {
+    console.log(res);
+}).catch((err)=> {
+    console.log('Error: Promise failed:',err);
+})
+console.log("end");
+
+Output:
+
+Start
+end
+[
+  { status: 'rejected', reason: 'Rakesh' },
+  { status: 'rejected', reason: 'this is Me' },
+  { status: 'fulfilled', value: 'Fly to Hogwarts' }
+]
+
+
+Promise.any:
+
+It is somewhat like Promise.race(It returns the first fulfilled/rejected promise) , it returns the first 
+fulfilled promise and ignores the rejected promises
+, if all promises are failed then only it returns all promises were rejected.
+
+Modern approach of handling promises: we use async and await.
+
+Eg program:
+console.log("Start");
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },100);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(`this is ${msg}`);
+        },100);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+   
+
+const result = async() => {
+    const msg1 = await importantAction("Rakesh");
+    const msg2=await likeit("Me");
+    const msg3=await doSomething("Hogwarts");
+    console.log({msg1,msg2,msg3});
+}
+result();
+console.log("end");
+
+Output: 
+Start
+end
+{ msg1: 'Rakesh', msg2: 'this is Me', msg3: 'Fly to Hogwarts' }
+
+If there is any promise which has failed then it has to be handled , and the error would be like Unhandled promise so to handle
+it we need to place within try and catch block.
+
+const result = async() => {
+    try {
+         const msg1 = await importantAction("Rakesh");
+    const msg2=await likeit("Me");
+    const msg3=await doSomething("Hogwarts");
+    console.log({msg1,msg2,msg3});
+    } catch(e) {
+        console.log('Promise failed:',e);
+    }
+}
+
+if the second promise likeit is failed then output:
+Start
+end
+Promise failed: this is Me
+
+Output based questions:
+1.
+
+console.log("start");
+
+const promise1 = new Promise((resolve,reject)=> {
+    console.log(1);
+    resolve(2);
+});
+
+promise1.then((res)=> {
+    console.log(res);
+});
+
+console.log("end");
+
+Output: start 1 end 2
+
+2.
+
+console.log("start");
+
+const promise1 = new Promise((resolve,reject)=> {
+    console.log(1);
+    resolve(2);
+    console.log(3);
+});
+
+promise1.then((res)=> {
+    console.log(res);
+});
+
+console.log("end");
+
+Output: start 1 3 end 2
+
+3.
+
+console.log("start");
+
+const promise1 = new Promise((resolve,reject)=> {
+    console.log(1);
+    // resolve(2);
+    console.log(3);
+});
+
+promise1.then((res)=> {
+    console.log(res);
+});
+
+console.log("end");
+
+Output: start 1 3 end
+
+4.
+
+console.log("start");
+
+const fn =  () => new Promise((resolve,reject)=> {
+    console.log(1);
+     resolve("success");
+    //console.log(3);
+});
+console.log("middle");
+fn().then((res)=> {
+    console.log(res);
+});
+
+console.log("end");
+
+Output: start middle 1 end success
+
+5.
+
+function job() {
+    return new Promise(function(resolve,reject) {
+        reject();
+    });
+}
+
+let promise = job();
+
+promise.then(function() {
+    console.log("Success 1");
+})
+.then(function () {
+    console.log("Success 2");
+})
+.then(function () {
+    console.log("Success 3");
+})
+.catch(function () {
+    console.log("Error 1");
+})
+.then(function () {
+    console.log("Success 4");
+})
+
+Output :
+Error 1 Success 4
+
+6.
+
+function job(state) {
+    return new Promise(function(resolve,reject) {
+        if(state) {
+            resolve("success");
+        } else {
+            reject("error");
+        }
+    });
+}
+
+let promise = job(true);
+
+promise.then(function() {
+    console.log("Success 1");
+})
+.then(function () {
+    console.log("Success 2");
+})
+.then(function () {
+    console.log("Success 3");
+})
+.catch(function () {
+    console.log("Error 1");
+})
+.then(function () {
+    console.log("Success 4");
+})
+
+Output : 
+Success 1 
+Success 2 
+Success 3 
+Success 4
+
+7.
+function job(state) {
+    return new Promise(function(resolve,reject) {
+        if(state) {
+            resolve("success");
+        } else {
+            reject("error");
+        }
+    });
+}
+
+let promise = job(true);
+
+promise.then(function(data) {
+    console.log(data);
+    return job(false);
+})
+.catch(function (error) {
+    console.log(error);
+    return "Error caught" --> this is considered as fulfilled promise so it goes to next then
+})
+.then(function (data) {
+    console.log("2nd then:",data);
+    return job(true); --> this obviously will call resolve("success") but since there is no next then chained to it execution stops here
+})
+.catch(function (error) {
+    console.log(error);
+})
+
+Output :
+ success
+ error
+ 2nd then: Error caught
+
+
+8.
+
+function job(state) {
+    return new Promise(function(resolve,reject) {
+        if(state) {
+            resolve("success");
+        } else {
+            reject("error");
+        }
+    });
+}
+
+let promise = job(true);
+
+promise.then(function(data) {
+    console.log(data);
+    return job(true);
+})
+.then(function (data) {
+    if(data! == "victory") {
+        throw "Defeat";
+    }
+    return job(true);
+})
+.then(function (data) {
+    console.log(data);
+})
+.catch(function (error) {
+    console.log(error);
+    return job(false);
+})
+.then(function (data) {
+    console.log(data);
+    return job(true);
+})
+.catch(function (error) {
+    console.log(error);
+    return "Error caught";
+})
+.then(function (data) {
+    console.log(data);
+    return new Error("test"); // not returning a promise
+})
+.then(function(data) {
+    console.log("Success:",data.message);
+})
+.catch(function(data) {
+    console.log("Error:",data.message);
+})
+
+Output: so the thing is when throw "defeat" is encountered --> it 
+is taken as rejected promise it searches for 
+catch block not necessary it should be immediate one
+
+success
+1st catch: Defeat
+2nd catch: error
+Error caught
+Success: test
+
+Question:
+
+Promise chaining
+
+create a promise called firstPromise which will resolve to a text called first,
+and then create another promise called secondPromise which would resolve
+the first Promise we created. then we will resolve our second promise and output of which we have to pass our first
+promise and then we have to print firstPromise
+
+const firstPromise = new Promise((resolve,reject)=> 
+    {
+        resolve("first");
+    });
+
+
+
+const secondPromise = new Promise((resolve,reject)=> 
+    {
+        resolve(firstPromise);
+    });
+
+
+secondPromise.then((res)=> {
+    return res;
+}).then((res)=> {
+    console.log("Result:",res);
+})
+
+Output:
+
+Result: first
+
+Question:
+
+// Rewrite this example code using async/await instead of then/catch
+
+Question:
+function loadJson(url) {
+    return fetch(url).then((response) =>
+    {
+        if(response.status == 200) {
+            return response.json();
+        } else {
+            throw new Error(response.status);
+        }
+    });
+}
+
+loadJson("https://fakeurl.com/no-such-user.json").catch((err)=> {
+    console.log(err)
+})
+
+
+Soln:
+
+async function loadJson(url) {
+    const val = await fetch(url);
+    
+        if(response.status == 200) {
+            let jsonData = await response.json(); 
+            return jsonData;
+        } 
+            throw new Error(response.status);
+        
+    });
+}
+
+loadJson("https://fakeurl.com/no-such-user.json").catch((err)=> {
+    console.log(err);
+})
+
+// I did not get the above one - need to see
+
+Question:
+
+// Solve promises recursively
+
+function promRecurse(funcPromises) {
+
+}
+
+Soln:
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },100);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(`this is ${msg}`);
+        },100);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+
+function promRecurse(funcPromises) {
+ if(funcPromises.length === 0) return;
+ // shift method will take out first element in array and tat array will not contain the first element
+ const currentPromise = funcPromises.shift();
+ currentPromise.then((res)=> {
+     console.log("Response:",res);
+ }).catch((err)=> {
+     console.log("Error:",err);
+ })
+ promRecurse(funcPromises);
+}
+
+promRecurse([
+    importantAction("Rakesh"),
+likeit("Me"),
+doSomething("Hogwarts"),
+    ]);
+	
+Output:
+Response: Rakesh
+Response: this is Me
+Response: Fly to Hogwarts
+
+
+Question:
+Promise Polyfill implementation
+
+function PromisePolyfill(executor) {
+    let onResolve,onReject;
+    function resolve(value) {
+        onResolve(value);
+    }
+    function reject(value) {
+        onReject(value);
+    }
+    this.then = function(cb) {
+        onResolve = cb;
+        return this;
+    }
+    this.catch = function(cb) {
+        onReject = cb;
+        return this;
+    }
+    executor(resolve,reject);
+    
+}
+
+const examplePromise = new PromisePolyfill((resolve,reject) => {
+    setTimeout(()=>
+    {
+        resolve(2);
+    },2000);
+});
+
+examplePromise.then((res)=>
+{
+    console.log(res);
+}).catch((err)=> {
+    console.log(err);
+})
+
+Output : 2
+
+In above eg we have asynchronous code which is setTimeout if we comment it out resolve(2) is synchronous code and it will be failed
+saying onResolve is not a function as it is just a function so we need to handle synchronous code also
+
+Handling synchronous code and asynchronous code for both resolve and reject below code:
+
+function PromisePolyfill(executor) {
+    let onResolve,onReject,isFulfilled=false,
+    isCalled=false,dummyval,isRejected=false;
+    function resolve(value) {
+        isFulfilled=true;
+        dummyval = value;
+        if(typeof onResolve === "function") {
+            onResolve(value);
+            isCalled = true;
+        }
+        
+    }
+    function reject(value) {
+        isRejected = true;
+        dummyval = value;
+        if(typeof onReject === "function") {
+            onReject(value);
+            isCalled = true;
+        }
+    }
+    this.then = function(cb) {
+        onResolve = cb;
+        if(isFulfilled && !isCalled) {
+            isCalled = true;
+            onResolve(dummyval);
+        }
+        return this;
+    }
+    this.catch = function(cb) {
+        onReject = cb;
+        if(isRejected && !isCalled) {
+            isCalled = true;
+            onReject(dummyval);
+        }
+        return this;
+    }
+    try {
+    executor(resolve,reject);
+    }catch(err) {
+        console.log('Error:',err);
+    }
+    
+}
+
+const examplePromise = new PromisePolyfill((resolve,reject) => {
+    setTimeout(()=>
+    {
+        reject(2);
+    },2000);
+});
+
+examplePromise.then((res)=>
+{
+    console.log(res);
+}).catch((err)=> {
+    console.log("Error:",err);
+})
+
+for resolve and reject direct implementation(did not get it need to check)
+
+PromisePolyfill.resolve(val) => {
+return new PromisePolyfill(function executor(resolve,reject) {
+resolve(val);
+});
+};
+
+and for reject vice versa
+
+Question:
+
+Create polyfill for Promise.all.
+
+
+function importantAction(uname)
+{
+
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(uname);
+        },1000);
+        
+    });
+}
+
+function likeit(msg) {
+    
+    return new Promise((resolve,reject)=> {
+        setTimeout(()=> {
+        resolve(`this is ${msg}`);
+        },1000);
+        
+    });
+    
+}
+
+function  doSomething(title) {
+    return new Promise((resolve,reject) =>
+    {
+        setTimeout(()=>
+    {
+        resolve(`Fly to ${title}`);
+    },1000); 
+    })
+}
+   
+Promise.allPolyfill = (promises) => {
+    return new Promise((resolve,reject)=> {
+        const result = [];
+        if(!promises.length) {
+            resolve(result);
+            return;
+        }
+        let pending = promises.length;
+        promises.forEach((promise,index)=> {
+            Promise.resolve(promise).then(res=> {
+                result[index] = res;
+                pending --;
+                if(pending === 0) {
+                    resolve(result);
+                }
+            },reject)
+        });
+    });
+}
+
+
+Promise.allPolyfill([
+importantAction("Rakesh"),
+likeit("Me"),
+doSomething("Hogwarts"), 
+]).then((res)=> {
+    console.log(res);
+}).catch((err)=> {
+    console.log(err);
+})
+
+
+Output : [ 'Rakesh', 'this is Me', 'Fly to Hogwarts' ]
+
+complete polyfill for other combinators , it is in blog. I will check tmrw evening
+
+
+
+
+
