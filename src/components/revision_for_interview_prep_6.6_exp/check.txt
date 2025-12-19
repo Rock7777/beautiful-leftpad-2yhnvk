@@ -573,6 +573,1198 @@ user.rc1(); // will ouptput Subscribe to undefined as rc1 which is arrow functio
 
 where as user.rc2(); // will ouptput Subscribe to Rakesh as rc2 which is normal function refers to userName within user object
 
+4. Interview_prep_4
+
+Interview prep_4:
+
+Closure: ability to have access to outer function lexical scope from inner function. closures ofcourse are functions
+
+In other words as per docs closure gives u access to outer function's scope from an inner function. Closures are created everytime
+a function is created.
+
+
+eg. for closures:
+
+function subscribe() {
+    var name = "Roadside Coder";
+    function displayName() {
+        alert(name);
+    }
+    displayName();
+}
+
+subscribe();
+
+eg.2:
+
+function makeFunc() {
+    var name = "Mozilla";
+    function displayName() {
+        alert(name);
+    }
+    return displayName;
+}
+
+var myFunc = makeFunc();
+myFunc();
+
+O/P: Mozilla , myFunc holds the function displayName
+
+eg:3
+
+function makeFunc() {
+    var name = "Mozilla";
+    function displayName(num) {
+        console.log(name,num); // O/P will be Mozilla 5
+    }
+    return displayName;
+}
+
+makeFunc()(5);
+
+// Closure Scope chain
+
+each closure has three scopes --> 1.Global scope , 2.Outer function scope and 3.Local scope
+
+var dsom="Hello"; // --> Global scope
+function makeFunc() {
+    var name = "Mozilla"; // --> Outer function scope
+    function displayName(num) {
+	// Local scope
+        console.log(name,num); // O/P will be Mozilla 5
+    }
+    return displayName;
+}
+
+closure gives u access to outer function lexical scope and also outer function's parent scope which is global scope in below eg:
+
+it means:
+
+var dsom="Hello"; // --> Global scope
+function makeFunc() {
+    var name = "Mozilla"; // --> Outer function scope
+    function displayName(num) {
+	// Local scope
+        console.log(name,num,dsom); // O/P will be Mozilla 5 Hello
+    }
+    return displayName;
+}
+
+Eg: for explanation of Scope chain
+
+var e = 10;
+function sum(a) {
+    return function(b) {
+        return function(c) {
+            return function(d) {
+                return a+b+c+d+e;
+            }
+        }
+    }
+}
+
+console.log(sum(1)(2)(3)(4)) // Output will be 20
+
+Interview questions on closures?
+
+Q1.
+let count = 0;
+(function printCount() {
+    if(count === 0) {
+        let count = 1;
+        console.log('In:',count);
+    }
+    console.log('Out:',count);
+})();
+
+O/p: In: 1,Out:0
+
+Imp pt: var actually has function scope(it means if var variable is declared it is not accesible outside pf function
+, let and const have block scope ) , hence variables declared in global scope(i.e outside) with any keyword(let,var or const) tat
+variable has global scope
+
+Imp pt:(Doubt)
+Lexical scope : means having access to parent function's parent scope or we can say being able to access parent scope from function scope
+
+Q2. Write a function that would allow you to do this:
+
+var addSix = createBase(6);
+addSix(6); // returns 16
+addSix
+
+Soln:
+
+const createBase=(a)=>
+{
+    const add=(b) =>
+    {
+        console.log(b+a);
+    }
+    return add;
+}
+
+var addSix = createBase(6);
+addSix(10);
+addSix(21);
+
+// Ques 3: Time Optimization
+
+Can we use closures to optimize the time //--> Yes
+
+Normal code:
+function find(index) {
+    let a =[];
+    for(let i=0;i<1000000;i++) {
+        a[i] = i*i;
+    }
+     console.log(a[index])
+}
+
+
+console.time("6");
+find(6);
+console.timeEnd("6");
+console.time("12");
+find(12);
+console.timeEnd("12");
+
+// console.time and console.timeEnd give the time taken
+
+after adding closures:// time taken is very small
+
+function find() {
+    let a =[];
+    for(let i=0;i<1000000;i++) {
+        a[i] = i*i;
+    }
+    function closureFind(index)
+    {
+        console.log(a[index])
+    }
+    return closureFind;
+}
+
+
+
+var c = find();
+console.time("6");
+c(6);
+console.timeEnd("6");
+console.time("12");
+c(12);
+console.timeEnd("12");
+
+Q4. Block scope and setTimeout
+
+for (var i=0; i<3; i++) {
+    setTimeout(function log() {
+        console.log(i);
+    },1000);
+}
+
+Output : 3 3 3 since var is used and also setTimeout also executes only after entire code gets executed successfully
+
+In order to get 0 1 2 we can use let,
+
+for (let i=0; i<3; i++) {
+    setTimeout(function log() {
+        console.log(i);
+    },1000);
+}
+
+How can I get output as 0 1 2 even with var keyword using closures
+
+  for (var i=0; i<3; i++) {
+            function b(i) {
+                setTimeout(function log() {
+        console.log(i);
+    },1000);
+            }
+    b(i);    
+}
+
+O/P : 0 1 2 as now it takes i to be local variable and it is not function scope
+
+
+Q5: how would you use a closure to create a private counter?(It is just a closure concept)
+
+function closurecounter()
+{
+    var _counter=0;
+    function add(increment) {
+        _counter+=increment;
+    }
+    function retrieve() {
+        console.log('Counter Value:' + _counter);
+    }
+    return {
+        add,
+        retrieve
+    }
+}
+
+const c = closurecounter();
+c.add(10);
+c.add(20);
+c.retrieve(); // Output is 30
+
+Q6: what is Module pattern?  --> doubt(learn abt module pattern)
+
+eg:
+
+function hello()
+{
+    function private()
+    {
+        // do something
+        console.log('private');
+    }
+    function public() {
+        // make call to function private
+        console.log('public');
+    }
+    return public;
+}
+
+const c= hello();
+console.log(c);
+c(); // will output public
+
+c.private(); // will return error as private function is not returned
+
+Q7: Make this run only once
+
+Question:
+let view;
+function like() {
+    view="Hello";
+	console.log("Say," + view);
+};
+const c=like();
+c();
+c();
+c();
+c();c();
+c();c();
+c();
+
+the above calls make the same code run multiple times
+
+Answer:let view;
+
+function like() {
+    view="Hello";
+    let called = 0;
+    function b()
+    {
+        if(called > 0)
+        {
+            
+        }
+        else 
+        {
+    console.log("Say," + view);
+    called++;
+        }
+    }
+    return b;
+};
+const c=like();
+c();
+c();
+c();
+c();c();
+c();c();
+c();   --> this way how many times u call it runs only once
+
+Q8:
+if the same above thing but I need to create a generic function , then actually loadash module already has implementation for this once
+function , so we will be creating Polyfill for it.
+
+Doubt: learn apply and come back here
+
+function once(fun,context) {
+    let ran;
+    return function() {
+        if(fun) {
+            ran = fun.apply(context || this ,arguments);
+            fun=null;
+        }
+        return ran;
+    }
+}
+const hello = once((a,b) => console.log('hello',a,b));
+
+hello(1,2);
+hello(1,2);
+hello(1,2);
+
+Q9: Memoize polyfill(Cars 24 interview) --> use call for it
+
+function memoize(fn,context) {
+    let res = {};
+    return function(...args) {
+        let argsCache = JSON.stringify(args);
+        if(!res[argsCache]) {
+            res[argsCache] = fn.call(context || this,...args);
+        }
+        return res[argsCache];
+    }
+}
+
+const  check = (a,b) => {
+    for(let i=0;i<1000000;i++) {}
+    return a * b;
+}
+
+const mymemoizedproduct = memoize(check);
+console.time('first call:');
+console.log(mymemoizedproduct(2076987,3018967));
+console.timeEnd('first call:');
+
+console.time('second call:');
+console.log(mymemoizedproduct(2076987,3018967));
+console.timeEnd('second call:');
+
+Q10: Difference b/w scope and Closure?
+Closure : ability of inner function having access to outer function's lexical scope is closure , so here inner function is closure
+usually inner function is returned hence outer function variable can be used  at later time
+
+where as Scope mentions the access or visibility variable has : scope Types : -> local scope and global scope and also function scope
+
+
+5. Interview_prep_5
+
+Currying:
+
+It is a function which takes one argument at a time and returns a new function expecting a next argument
+
+i.e f(a,b) --> f(a)(b)
+
+Q1. why do we use currying?
+
+some of them are:
+
+with currying we no need to use the same variable again and again.
+Currying helps to create higher order function as it returns a function.
+Higher order functions : They are functions which can take other functions as arguments or return them as results.
+since we are going level by level we create functions where we can debug easily
+
+Higher order function:
+A Higher-Order function is a function that receives a function as an argument or returns the function as output.
+
+Q2: sum(2)(6)(1)
+
+function sum(a) {
+    return function (b) {
+        return function (c) {
+            console.log(a+b+c);
+        }
+    }
+}
+
+sum(2)(6)(1) 
+
+Output is 9.
+
+Q3: 
+/*
+evaluate("sum")(4)(2) // --> Output has be 6
+evaluate("multiply")(4)(2) // --> Output has be 8
+evaluate("divide")(4)(2) // --> Output has be 2
+evaluate("subtract")(4)(2) // --> Output has be 2
+*/
+
+
+*/
+
+Soln:
+
+function evaluate(a) {
+    return function (b) {
+        return function (c) {
+            if(a === 'sum') 
+            {
+                console.log(b+c);
+            }
+            else if(a === 'subtract') {
+                console.log(b-c);
+            }
+            else if(a === 'multiply') {
+                console.log(b*c);
+            }
+            else {
+                console.log(b/c);
+            }
+        }
+    }
+}
+
+Q4: Infinite currying --> sum(1)(2)(3)....(n) --> we can do it with recursion
+
+Implement console.log(add(5)(2)(4)(5)())
+
+function add(a) {
+    return function(b) {
+        if(b) return add(a+b);
+        return a;
+    }
+}
+
+console.log(add(5)(2)(4)(5)());
+
+Q5: Currying vs partial appln
+
+partial appln eg:
+
+function add(a) {
+    return function(b,c) {
+			console.log(a+b+c);
+    }
+}
+
+add(1)(2,3) // output:6
+
+currying eg:
+
+function add(a) {
+    return function(b) {
+		return function(c) {
+			console.log(a+b+c);
+		}
+    }
+}
+
+add(1)(2)(3) // output:6
+
+Q6: Real world eg. for using currying
+
+Currying can be used to manipulate DOM
+
+eg:
+
+index.html
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Page Title</title>
+	</head>
+	<body>
+		<h1 id="header1">Rakesh</h1>
+		<script src="script.js"></script>
+	</body>
+</html>
+
+script.js:
+
+function update(id) {
+    return function(content) {
+        document.getElementById(id).innerHTML = content;
+    }
+}
+
+const updateHeaderValue = update('header1');
+updateHeaderValue('Change it!!!');
+
+question 7:
+write a curry() function which 
+convert f(a,b,c) into f(a)(b)(c) but what we are doing below is to trying to prove b=a like f(a)(b)(c)(d) into f(a,b,c,d)
+
+function curry(fn) {
+    return function curriedFunction(...args)
+    {
+        if(args.length>=fn.length)
+        {
+            return fn(...args);
+        }
+        else 
+        {
+            return function(...next) {
+                return curriedFunction(...args,...next);
+            }
+            
+        }
+    }
+}
+
+const multiply = (a,b,c,d) => a*b*c*d;
+
+const h = curry(multiply);
+console.log(h(6)(7)(1)(2));
+
+there is one question in the blog which I did not get , lets see after I complete - not seeing it
+
+6. Interview_prep_6
+
+Objects: I think I have already seen it just will reference it
+
+everything in JS is a object.
+
+An object is standalone entity with properties somewhat like collection of key , value pairs and also have also
+method associated with it.
+
+O/p based questions:
+
+Q1.const func = (function(a) {
+    delete a;
+    return a;
+})(5);
+
+console.log(func); // this would output 5 since a is a value and not an object (delete keyword only is used with object properties)
+
+Q2.how to dynamically add key and value to object 
+
+eg:
+
+const property='Beauty';
+const value='I Love You 3000';
+const obj={
+    property:value,
+}
+
+console.log('Obj:',obj); // this would print out Obj: { property: 'I Love You 3000' }
+
+but to get correct way: 
+
+Obj: { Beauty: 'I Love You 3000' }
+const property='Beauty';
+const value='I Love You 3000';
+const obj={
+    [property]:value,
+}
+
+Q3. To iterate over an  object and show keys and values ==> use this : user[key]
+
+const user = {
+     name:'Rakesh',
+     age:24,
+     isTotallyAwesome: true,
+ }
+ for(key in user)
+ {
+     console.log(key); // Output will be name age isTotallyAwesome
+ }
+ 
+ Q4.  const obj = {
+     a:"one",
+     b:"two",
+     a:"three",
+ } 
+ console.log(obj); // Output is { a: 'three', b: 'two' }
+ 
+ Q5: Create a function tat multiplies numerics by 2:
+ 
+ Soln:
+  let nums = {
+     a: 100,
+     b: 200,
+     title: "My nums",
+ }
+ 
+
+ 
+ const multiplyNumeric = (obj) => {
+     for(key in obj) {
+         if(typeof(obj[key]) === 'number') {
+             obj[key] = obj[key] * 2;
+         }
+     }
+     return obj;
+ }
+ 
+ console.log(multiplyNumeric(nums)); // Output : { a: 200, b: 400, title: 'My nums' }
+ 
+ Imp Note: Object cannot be converted into key unless it is a string
+
+7. Interview_prep_7
+
+This keyword:
+
+there are two types of binding . --> implicit and explicit 
+explicit binding is done using call,bind and apply
+implicit binding means if we use dot(.) operator eg: c.add(); where c holds the function(so c is the function expression and add is function within it)
+
+In this snippet:
+
+this.a = 5;
+console.log(this);
+console.log(this.a); 
+
+this refers to global context(window object) in above code
+
+eg2:
+
+let user = {
+    name:"Rakesh",
+    age:24,
+    childObj: {
+        newName:"Harsha",
+    getDetails() {
+        console.log(this.newName , "and" , this.name);
+    },
+},
+} 
+
+user.childObj.getDetails(); --> it will output Harsha and undefined since this refers to parent object which is childObj and not user obj
+
+eg:3
+
+let user = {
+    name:"Rakesh",
+    age:24,
+    getDetails:() => {
+        console.log(this.name,this);
+    },
+}
+
+user.getDetails(); --> output will be undefined and {} , since getDetails is arrow function this refers to global context which is window object
+
+if arrow function has a parent function then this in arrow function points to object that holds its parent function else as known this points
+to window object.
+
+eg:4 --> when arrow function  has a parent function
+
+let user = {
+    name:"Rakesh",
+    age:24,
+    getDetails () {
+        const nestedArrow = () => console.log(this.name,this);
+        nestedArrow();
+    },
+}
+
+user.getDetails(); // outputs Rakesh { name: 'Rakesh', age: 24, getDetails: [Function: getDetails] }
+
+How this keyword works inside a class or a constructor?
+
+eg for this keyword in class?
+
+class user{
+    constructor(n) {
+        this.name=n;
+    }
+    getName() {
+        console.log(this.name);
+    }
+}
+
+const a = new user('Rock');
+console.log(a); // user {name:'Rock'}
+a.getName(); // output is Rock
+
+
+Output based questions:
+
+Q1:
+
+const user = {
+    firstName: "Rakesh1",
+    getName() {
+        const firstName = "Rakesh2";
+        return this.firstName;
+    }
+}
+
+console.log(user.getName()); // output is Rakesh1
+
+Q2:
+
+function makeUser() {
+    return {
+        name: "John",
+        ref:this,
+    }
+}
+
+let user = makeUser();
+console.log(user.ref.name); // output is undefined because this refers to global context , window object
+
+In order to make this work:
+
+function makeUser() {
+    return {
+        name: "John",
+        ref() {
+		 return this;
+		}
+    }
+}
+
+let user = makeUser();
+console.log(user.ref().name); // it outputs John
+
+Q3:
+
+const user = {
+    name: "Rakesh",
+    logMessage() {
+        console.log(this.name)
+    },
+};
+
+setTimeout(user.logMessage,1000);
+
+SETTIMEOUT(USER.LOGMESSAGE,1000); --> IT OUTPUTS UNDEFINED BCOZ HERE WE ARE NOT MAKING A FUNCTION CALL BUT CALLBACK AS SETTIMEOUT 
+TREATS IT THAT WAY SO IT REFERS TO WINDOW OBJECT AND 
+UNDEFINED IS THE OUTPUT.  WITH SETTIMEOUT(USER.LOGMESSAGE(),1000); WILL RETURN RAKESH AND THROW AN ERROR CITING IT
+IS EXPECTING A FUNCTION AND NOT A CALLBACK , SO
+
+To fix this:
+
+const user = {
+    name: "Rakesh",
+    logMessage() {
+        console.log(this.name)
+    },
+};
+
+setTimeout(function(){user.logMessage()},1000); --> this will output Rakesh
+
+Q4:
+
+const user = {
+    name: "Piyush",
+    greet() {
+        return `Hello, ${this.name}!`;
+    },
+    farewell:() => {
+        return `Goodbye, ${this.who}!`;
+    },
+};
+
+console.log(user.greet()); // Hello, Piyush
+console.log(user.farewell()); // Goodbye, undefined
+
+Imp pt: In JS , we use prompt() for user input
+
+Q5:
+
+create an object calculator
+
+let calculator = {
+    read() {
+       this.a = +prompt("a=",0);  // + is added to consider user input as number else they will be considered strings
+       this.b = +prompt("b=",0);
+    },
+    sum()
+    {
+        return this.a + this.b;
+    },
+    mul() {
+        return this.a * this.b;
+    },
+}
+
+calculator.read();
+
+console.log(calculator.sum());
+console.log(calculator.mul());
+
+
+Q6: --> need to recheck
+ need to check not sure actually output for object.method(callback) has to be 4
+var length = 4;
+function callback() {
+    console.log(this.length);
+}
+const object = {
+    length: 5,
+    method(fn) {
+        fn();
+    },
+};
+callback(); // Output : undefined
+object.method(callback); // Output : undefined
+
+
+another question; // got it as callback function parent is array object itself that's why
+
+var length = 4;
+
+function callback() {
+    console.log(this.length);
+}
+
+const object = {
+    length: 5,
+    method() {
+        console.log('Arguments:',arguments); // Arguments: [Arguments] { '0': [Function: callback], '1': 2, '2': 5 }
+        arguments[0]();
+    },
+};
+console.log(this); 
+object.method(callback,2,5); // will give 3 as parent object is array itself and array has length method, number of arguments are three
+
+Q7: Implement calculator:
+
+the question is given with this:
+const result = calc.add(10).multiply(5).subtract(30).add(10);
+console.log(result.total);
+
+
+const calc = {
+    total : 0,
+    add(b)
+    {
+        this.total += b;
+        
+        return this;
+    },
+    multiply(b)
+    {
+        this.total *= b;
+        
+        return this;
+    },
+    subtract(b)
+    {
+        this.total -= b;
+        
+        return this;
+    },
+    
+    
+}
+const result = calc.add(10).multiply(5).subtract(30).add(10);
+console.log(result.total);
+
+8. Interview_prep_8
+
+Call,apply and bind:
+
+explicit object binding is done with call,apply and bind
+
+what is call?
+
+var obj = { name : "Rakesh"};
+function sayHello() {
+    return "Hello" + " " +  this.name;
+}
+
+console.log(sayHello()); // this would print Hello undefined
+
+In order to make sayHello method within obj so tat we would get output Hello Rakesh we need call method
+
+Usage of call method:
+
+var obj = { name : "Rakesh"};
+
+function sayHello(age) {
+    return "Hello" + " " +  this.name + " " + "is" + " " + age;
+}
+
+console.log(sayHello.call(obj,24)); // this would output Hello Rakesh is 24
+
+
+Impt pt : call method above accepts two arguments --> one being the object pointing to which function has to refer to
+and other is arguments , All JS functions contain call,apply and bind
+
+what is apply method?
+
+apply method is same like call method except it expects arguments to be passed in form of an array
+
+what is bind method?
+
+bind method returns a function which we can reuse again and again.
+
+Eg:
+
+var obj = { name : "Rakesh"};
+
+function sayHello(age) {
+    return "Hello" + " " +  this.name + " " + "is" + " " + age;
+}
+
+const bindFunc = sayHello.bind(obj);
+console.log(bindFunc); // Output: [Function: bound sayHello]
+
+console.log(bindFunc(25)); // Output: Hello Rakesh is 25
+console.log(bindFunc(18)); // Output: Hello Rakesh is 18
+
+
+Code snippet O/P based question:
+
+const person = { name : "Rakesh" };
+
+function sayHi(age) {
+    return `${this.name} is ${age}`;
+}
+
+console.log(sayHi.call(person,24)); // Output: Rakesh is 24
+console.log(sayHi.bind(person,24)); // [Function: bound sayHi]
+
+Q2:
+const age = 10;
+var person = {
+   name: "Rakesh",
+   age:20,
+   getAge: function() {
+       return this.age;
+   },
+};
+
+var person2 = { age: 24 };
+console.log(person.getAge.call(person2)); // output will be 24 as getAge will be in person2 object and then this refers to person2 and hence
+it returns 24
+
+
+Q3:
+
+var status = "Thug";
+ setTimeout(()=> {
+     const status = "Love";
+     
+     const data = {
+         status: "whistle",
+         getStatus() {
+             return this.status;
+         },
+     };
+     console.log(data.getStatus()); // whistle
+     console.log(this); 
+     console.log(data.getStatus.call(this)); // as in video it has to be Thug but it is undefined like before this in global context always showing undefined why??
+ },0)
+ 
+ Q4. 
+ // call printAnimals such
+// tat it prints all animals in object
+
+Soln: 
+
+ const animals = [
+     { species: "Lion",name: "King"},
+     { species: "Whale",name: "Queen"},
+];
+
+function printAnimals(i) {
+    this.print = function () {
+        console.log("#" + i + " " + this.species + ": " + this.name);
+    };
+    this.print();
+}
+for(let i=0;i<animals.length;i++) {
+printAnimals.call(animals[i],i); 
+}
+
+Q5.
+
+// Question 8 - Append an array to another array(can be done with for loop or with concat)
+
+const array = ["a","b"];
+const elements = [0,1,2];
+console.log(array.concat(elements)); // concAT would  create a new array not alter existing one's
+
+if the above ways cannot be used then:
+
+if we do array.push(elements) , then array would contain ["a",b,[0,1,2]] means individual elements are not added instead entire array is appended
+
+To get output like ["a","b",0,1,2] , array.push.apply(array,elements);
+
+Q6: find the max and min of an array  with apply/call/bind.
+
+const numbers = [5,6,2,3,7];
+Generally below two statements give max and min of an array
+console.log(Math.max(...numbers));
+console.log(Math.min(...numbers));
+
+console.log(Math.max.apply(null,numbers));
+console.log(Math.min.apply(null,numbers));
+
+Q6.
+O/P based question:
+
+function f() {
+    console.log(this);
+}
+
+let user = {
+    g:f.bind(null),
+}
+
+user.g();
+
+O/P: window object as bind returns another function
+
+Q7:
+// Bind chaining
+
+// Question 8 - Bind chaining
+
+function f() {
+    console.log(this.name);
+}
+
+f = f.bind({name: "John"}).bind({name:"Ann"});
+
+f(); // output is John
+
+why? --> bcoz once f is bind to an object it will be binded for entirety and will point to tat object only
+and in tis above eg: bind chaining doesn't work
+
+Imp pt: A function which is bound by a bind keyword cannot be rebound
+
+Q8:
+
+function checkPassword(success,failed) {
+    let password = prompt("Password?","");
+    if(password == "Rakesh7") success();
+    else failed();
+}
+
+let user = {
+    name: "Rakesh",
+
+
+loginSuccessful() {
+    console.log(`${this.name} logged in`);
+},
+
+loginFailed() {
+    console.log(`${this.name} failed to log in`);
+},
+};
+
+checkPassword(user.loginSuccessful,user.loginFailed); // this would print undefined logged in or undefined failed to log in based on 
+password 
+
+in order to output like  Rakesh logged in or Rakesh failed to log in based on 
+password then we can make this change: 
+
+checkPassword(user.loginSuccessful.bind(user),user.loginFailed.bind(user));
+
+Imp Note:
+call,bind and apply help us in getting right soln with this keyword.
+
+Q9. It is same as above used bind to solve it and is done
+
+function checkPassword(ok,fail) {
+    let password = prompt("Password?","");
+    if(password == "Rakesh7") ok();
+    else fail();
+}
+
+let user = {
+    name: "Rakesh",
+
+
+login(result) {
+    console.log(this.name + ( result ? "login successful" : "login failed"));
+},
+
+
+};
+
+checkPassword(user.login.bind(user,true),user.login.bind(user,false));
+
+Q10. Explicit binding with Arrow function:
+
+const age = 10;
+
+var person = {
+    name: "Piyush",
+    age:20,
+    getAgeArrow:()=> console.log(this.age),
+    getAge: function() {
+        console.log(this.age);
+    }
+}
+
+var person2 = { age:24 };
+person.getAge.call(person2); // 24
+person.getAgeArrow.call(person2); // undefined
+
+Q11. Polyfill for Call implementation:
+
+let car1 = {
+   color:"Black",
+   company:"Mercedes",
+}
+
+function purchaseCar(currency,price) {
+    console.log(`I have purchased ${this.color} - ${this.company} car for ${currency}${price}`);
+}
+ // since call belongs to prototype of function
+ 
+ Function.prototype.myCall = function(context={},...args) {
+     if(typeof this!= "function") {
+         throw new Error(this + "It is not callable");
+     }
+     context.fn = this;
+     context.fn(...args);
+ }
+
+purchaseCar.myCall(car1,"Rs.",500000);
+
+Polyfill for apply:
+
+let car1 = {
+   color:"Black",
+   company:"Mercedes",
+}
+
+function purchaseCar(currency,price) {
+    console.log(`I have purchased ${this.color} - ${this.company} car for ${currency}${price}`); // this will be printed out
+}
+ // since call belongs to prototype of function
+ 
+ 
+ Polyfill for apply:
+ 
+ Function.prototype.myApply = function(context={},args=[]) {
+     if(typeof this!= "function") {
+         throw new Error(this + "It is not callable");
+     }
+     if(!Array.isArray(args)) {
+         throw new Error("passed is not array");
+     }
+     context.fn = this;
+     context.fn(...args);
+ }
+
+purchaseCar.myApply(car1,["Rs.",50000]);
+
+Polyfill for bind:
+
+let car1 = {
+   color:"Black",
+   company:"Mercedes",
+}
+
+function purchaseCar(currency,price) {
+    console.log(`I have purchased ${this.color} - ${this.company} car for ${currency}${price}`);
+}
+ // since call belongs to prototype of function
+ 
+ Function.prototype.myBind = function(context={},...args) {
+     if(typeof this!= "function") {
+         throw new Error(this + "cannot be bound as it is not callable");
+     }
+     
+     context.fn = this;
+     return function (...newArgs) {
+         return context.fn(...args,...newArgs);
+     }
+     
+ }
+
+// purchaseCar.myApply(car1,["Rs.",50000]);
+const newFunc = purchaseCar.myBind(car1);
+newFunc("Rs.",50000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
