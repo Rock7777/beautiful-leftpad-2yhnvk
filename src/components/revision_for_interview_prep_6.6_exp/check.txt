@@ -1,1 +1,583 @@
 check
+
+#JS interview prep
+1.Interview_prep1
+Roadside coder preparing for JS and React JS interviews:
+
+lets complete Javascript interview questions first: 11 videos
+
+Topic 1: Questions on var,let and const --> let and const were introduced in ES6
+
+Types of Scope:
+1.Global scope
+2.Block scope
+3.functional scope
+
+var is function scope , let and const are block scope
+
+difference between global scope and lexical scope : Global scope means tat variable scope/lifetime lasts as long as appln , with lexical
+scope inner functions will be able to access the outer functions variable
+
+ Variable shadowing: it is same concept which happens with let and const , in shadowing we can shadow var variable with let but
+ not the other way around. --> if we do the other way it is illegal shadowing
+ 
+ eg:
+ 
+ function func() {
+    var a = 'Geeks';
+    let b = 'Geeks';
+     
+    if (true) {
+        let a = 'GeeksforGeeks'; // Legal Shadowing
+        var b = 'Geeks'; // Illegal Shadowing
+        console.log(a); // It will print 'GeeksforGeeks'
+        console.log(b); // It will print error
+    }
+}
+func();
+ 
+ Question can be on declaration --> var vs let vs const
+ 
+ let and const cannot be redeclared but with var we can redeclare variables
+ 
+ when we declare a variable with const , we need to initialize it else error will be thrown regardig it.
+ 
+ Question can be on re-initialization also:
+ with const re-initialization cannot be done --> will throw error
+ 
+ Question on hoisting --> var vs let vs const
+ 
+ for understanding hoisting we need JS execution context
+ 
+ JS execution context consists of two phases : 1. creation phase and 2. Execution phase
+ In first phase three steps happen : first window or global object gets created and then JS engine sets up memory heap for storing variables
+ and function references, then variables and function references will be assigned to undefined
+ 
+ In second phase values gets assigned to variable and function executes. for each function created , JS creates a new execution context
+ In JS we have call stack --> where function references are stored. 
+ 
+ Other thing : JS engine executes code line by line. During creation phase JS engine moves variables and function references to top of the code.
+ This is called hoisting.
+ 
+ I know that hoisting occurs with var keyword but with let and const we get Reference error . but hoisting also occurs with let and const also in 
+ Temporal dead zone but it hoisting does not work for it like var does. initialization happens in Temporal dead zone for let and const
+ 
+  the time between declaration and initilization of let and const variables is Temporal dead zone.
+  another definition for Temporal dead zone : state where variables are in scope but not yet declared.
+  
+  Checkout: lets checkout shadowing at the end once --> I got it.
+
+2. Interview_prep2
+
+JS questions on map,filter and reduce:
+
+map method : It can be applied on array to iterate over each item of array. It returns a new array from existing array by making
+function apply to each element of array.
+
+map takes three arguments : 1. the current element , 2.index and 3.array itself
+
+Filter method:
+filter in short takes each element of array checks it whether it satisfies a condition , if yes it makes computations if present
+and pushes into output array else filters it out. , filter also takes three arguments.
+
+reduce method:
+it reduces array of values into single value.
+reduce method takes callback function as the first argument like map and filter and also takes second argument which is initial Value in our
+case we set it to zero. in callback function it takes four arguments: --> 1.accumulator - holds value of previous computations
+2.i - index , 3.current - current element and 4. array itself
+
+arr.reduce((acc,i,curr,arr)=>
+{
+},initialValue)
+
+How can we create map,filter and reduce from absolute scratch.
+
+i.e. Polyfill 
+
+creating Polyfill for map:
+
+ // Polyfill for map
+ // Map: Arr.map((cur,i,arr)=>{})
+
+Array.prototype.Mymap = function(cb) {
+    let temp = [];
+    for (let i =0;i<this.length;i++)
+    {
+        temp.push(cb(this[i],i,this));
+    }
+  return temp;   
+}
+
+Array.prototype.Mymap --> here prototype makes sure that Mymap is added as method to existing Array method
+
+const a1=[1,2,3,4];
+const a2 = a1.Mymap((cur,i,arr)=>
+{
+    return cur * 3;
+})
+console.log(a2);
+
+Creating polyfill for filter:
+
+Array.prototype.Myfilter = function(cb) {
+    let temp = [];
+    for (let i =0;i<this.length;i++)
+    {
+        if(cb(this[i],i,this))
+        {
+        temp.push(this[i]);
+        }
+    }
+  return temp;   
+}
+
+const a1=[1,2,3,4];
+const a2 = a1.Myfilter((cur,i,arr)=>
+{
+    return cur > 3;
+})
+console.log(a2);
+
+Creating polyfill for reduce:
+
+Note: if we don't give initial value to reduce method , accumulator will take first element in array as initialValue and second element is 
+considered current
+
+Array.prototype.Myreduce = function(cb,initialValue) {
+    var acc = initialValue;
+    
+    for (let i =0;i<this.length;i++)
+    {
+        acc = acc ?  cb(acc,this[i],i,this) : this[i];
+    }
+  return acc;   
+}
+
+const a1=[1,2,3,4];
+const a2 = a1.Myreduce((acc,cur,i,arr)=>
+{
+    return acc + cur;
+},3)
+console.log(a2);
+
+Few more egs:
+
+// Polyfill for Map
+
+Array.prototype.myMap= function(cb)
+{
+    let tem = [];
+    for(let i=0;i<this.length;i++)
+    {
+        tem.push(cb(this[i],this,this));
+    }
+    return tem;
+}
+
+const a1=[2,3,4]
+
+const a2 = a1.myMap((curr,i,a1)=>
+{
+    return curr*10
+});
+
+console.log(a2);
+
+// Polyfill for filter
+
+Array.prototype.myFilter = function(cb)
+{
+    let tem = [];
+    for(let i=0;i<this.length;i++)
+    {
+        if(cb(this[i],i,this))
+        {
+            tem.push(this[i]);
+        }
+    }
+    return tem;
+}
+
+const a3=[2,456,32,34,11,34,76,89,90];
+const a4=a3.myFilter((cur,i,a3)=>
+{
+    return cur>34;
+})
+console.log(a4);
+
+// Polyfill for reduce
+
+Array.prototype.myReduce = function(cb,initialValue)
+{
+    var acc = initialValue;
+    for(let i=0;i<this.length;i++)
+    {
+    acc = acc ? cb(acc,this[i],i,this) : this[i]
+    }
+    return acc;
+}
+
+const a5=[10,20,30,56,76];
+const a6=a5.myReduce((acc,cur,i,a5)=>
+{
+    return acc + cur;
+},100);
+
+console.log(a6);
+
+Common question : map vs forEach
+
+forEach doesn't return a new array like map does.
+with map method we can chain other methods like for eg: filter can be applied but for forEach it cannot be done like that
+eg: a1.map((a)=>{}).filter()
+
+// o/p based qns for map,filter and reduce:
+
+Question : let students = [
+{name:"Rakesh",rollNumber:31,marks:80},
+{name:"Rajesh",rollNumber:15,marks:69},
+{name:"Ramesh",rollNumber:16,marks:35},
+{name:"Ram",rollNumber:7,marks:55},
+    ];
+   
+ // return only name of students in capital letters 
+Output code: 
+
+const a1=students.map((cur,i)=> {
+    return cur.name.toUpperCase();
+})
+console.log(a1);
+
+// return only details  of students with marks > 60 
+
+const a1=students.filter((cur) =>{
+    return cur.marks > 60;
+});
+console.log(a1);
+
+
+
+Q4:
+let students = [
+{name:"Rakesh",rollNumber:31,marks:80},
+{name:"Rajesh",rollNumber:15,marks:69},
+{name:"Ramesh",rollNumber:16,marks:35},
+{name:"Ram",rollNumber:7,marks:55},
+    ];
+   
+ // Calculate Sum of marks of allstudents  marks 
+
+const a1=students.reduce((ac,cur) =>{
+    return ac + cur.marks;
+},0);
+console.log(a1);
+
+Q5: 
+
+// return only names of students who scored more than 60
+
+let students = [
+{name:"Rakesh",rollNumber:31,marks:80},
+{name:"Rajesh",rollNumber:15,marks:69},
+{name:"Ramesh",rollNumber:16,marks:35},
+{name:"Ram",rollNumber:7,marks:55},
+    ];
+   
+ 
+
+const a1=students.filter((cur) =>{
+    return cur.marks > 60;
+}).map((current)=>
+{
+    return current.name;
+});
+console.log(a1);
+
+Q6:
+
+// return total marks for students with marks greater than 60
+ 
+// after 20 marks have been added to those who have scored less than 60
+
+let students = [
+{name:"Rakesh",rollNumber:31,marks:80},
+{name:"Rajesh",rollNumber:15,marks:69},
+{name:"Ramesh",rollNumber:16,marks:35},
+{name:"Ram",rollNumber:7,marks:55},
+    ];
+   
+ 
+const a1=students.map((cur) =>{
+    if(cur.marks<60)
+    {
+        cur.marks = cur.marks +  20;
+    }
+    return cur;
+}).filter((cur) => {
+        return cur.marks > 60;
+    
+}).map((cur)=>
+{
+    return cur.marks;
+}).reduce((acc,cur)=> {
+    return acc + cur;
+},0)
+
+console.log(a1);
+
+3. Interview_prep 3
+
+JS interview questions - functions:
+
+ Q1.what is function declaration?
+ 
+ example:
+ function rome() {
+ return 0;
+ }
+ 
+ Q2. what is function expression?
+ 
+ if function is stored inside  a variable or assigned to a variable , then it is called function expression.
+
+ eg:
+ const f = () => 
+ {
+ console.log('function expression');
+ }
+ 
+ var str = function hello(r) { return r;}
+ 
+ Q3. first class functions?
+ 
+ if a function can be treated as a variable(so the function which is passed as an argument is first class function) , 
+ means it can be passed as an argument to another function 
+ and that function can use tat 
+ argument and return it.
+ 
+ eg: 
+ // here cube is first class function
+ function cube(s) {
+    return s*s*s;
+}
+
+function displayCube(fn) {
+    console.log('Cube:' + fn(2));
+}
+
+displayCube(cube);
+
+Q4: what is IIFE?
+IIFE - immediately invoked function expression --> it means there is no need of calling it separately , function gets invoked 
+automatically.
+
+(function cube(s) {
+    console.log("Result:",s*s*s);
+})(5);
+
+ O/P based question:
+ 
+ (function (x) {
+    return (function(y) {
+        console.log(x);
+    })(2);
+})(1); 
+
+O/P: 1 --> got it
+
+Closures: The ability of a function to access function and variables outside of its lexical scope is called closures
+
+Q5: O/p based question for function scope:
+
+for(var i=0;i<5;i++) {
+    setTimeout(function () {
+        console.log(i);
+    },i * 1000);
+}
+
+O/P: 
+5 
+5 
+5 
+5 
+5
+
+for(let i=0;i<5;i++) {
+    setTimeout(function () {
+        console.log(i);
+    },i * 1000);
+}
+
+O/P:
+0
+1
+2
+3
+4
+
+Q6. Hoisting question
+
+Functions are hoisted differently than normal variable
+
+functions are hoisted completely unlike variables where only declaration's are hoisted
+
+eg:
+
+a1(); --> this would print workattech as functions are hoisted completely
+
+function a1() {
+    console.log("workattech");
+}
+
+Q7 : function hoisting - O/P based question
+
+var x= 21;
+ var fun = function()
+ {
+     console.log(x);
+     var x = 20;
+ }
+ 
+ fun();
+ 
+ Output: it would print undefined , as redeclaration is allowed in var , it would take the latest var declaration
+ and since value is not initialized , output will be undefined. (Separate execution context is created for local scope and 
+ global scope)
+ 
+ Q8: params vs arguments
+ 
+ 
+ function square(num) // num here is parameter
+{
+    console.log(num * num);
+}
+
+square(5); // here 5  passed is argument
+
+O/P: 25
+
+
+Q9 : spread vs rest operator
+
+function square(...nums) // --> this is rest operator
+{
+    console.log(nums[0] * nums[1]);
+}
+ var a1=[5,6]
+square(...a1); // in the function call when array is passed it is done using spread operator
+
+Q10.
+
+const fn = (a,...numbers,x,y) => {
+    console.log(x,y);
+}
+
+fn(5,6,3,7);
+
+O/p: it will be syntax error because always rest operator should be the last parameter
+
+Q12. Callaback function
+
+Callback function is a function which is passed as an argument to other function and then it is invoked within that function 
+to perform some kind of action.
+
+eg:
+
+function hello(name)
+{
+console.log('Hi' + name);
+}
+
+function fn2 (fn) {
+  fn(Rakesh);
+}
+
+fn2(hello);
+
+eg of callback functions: map,filter and reduce , eventlisteners eg: document.addEventListener('click',function(){
+console.log('Inside callback function')}) , setTimeout
+
+Q13. Arrow functions
+
+Arrow functions were introduced in ES6
+
+Differences between arrow functions and regular functions
+
+1. Syntax
+
+Normal function:
+
+function square() 
+{
+console.log('In regular function - square');
+}
+
+const square = () => {
+console.log('In arrow function - square');
+}
+
+2. arguments // arguments keyword is accesible in normal function and not in arrow function
+
+function square() 
+{
+console.log('Arguments:',arguments);
+}
+
+square(1,3,2);
+
+O/p: 1 3 2 
+
+const  square => () 
+{
+console.log('Arguments:',arguments);
+}
+
+square(1,3,2);
+
+O/p: Error mentioning arguments is not defined or whaterver values we passed as arguments will not be considered
+
+
+3. Return keyword is implicit in arrow function
+
+function square() 
+{
+console.log('Arguments:',arguments);
+return arguments;
+}
+
+const b = sqaure(1,3,2);
+console.log(b); //==> will give output as 1 3 2
+
+const sqaureArrow = (a,b) => a*b;
+
+const b = sqaureArrow(1,3);
+console.log(b); //==> will give output as 3
+
+
+4. this keyword.
+
+eg:
+
+let user = {
+username:'Rakesh',
+rc1:()=>
+{
+console.log('Subscribe to ' + this.username);
+},
+rc2() {
+console.log('Subscribe to ' + this.username);
+},
+};
+
+user.rc1(); // will ouptput Subscribe to undefined as rc1 which is arrow function refers to global object
+
+where as user.rc2(); // will ouptput Subscribe to Rakesh as rc2 which is normal function refers to userName within user object
+
+
+
+
+
+ 
+  
+ 
+ 
