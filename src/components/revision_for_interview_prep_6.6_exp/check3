@@ -1,0 +1,94 @@
+Coding questions and solutions
+
+JS Interview preparation:
+
+1.Make palindrome program work
+2. u have an array of arrays make it a single array.
+
+Arrays are special types of objects. typeof operator returns objects for Arrays.
+
+flat method was introduced in ES2019. It can be used to flatten nesting of arrays.
+
+const arr = [1,[2,3],[4,5,[6]],7,[8]]
+const a2 = arr.flat(2);
+console.log(a2); // Output : [1,2,3,4,5,6,7,8]
+
+by default flat assumes the depth to be 1 if not specified means it will flatten out one level nesting if it is higher than one
+it is better to go with Infinity
+
+
+Program solution using recursion:
+
+const arr = [1,[2,3],[4,5,[6]],7,[8]]
+// const a2 = arr.flat(Infinity);
+// console.log(a2);
+let finalArr=[]
+function fun1(arr)
+{
+    for(let i=0;i<arr.length;i++)
+    {
+        if(typeof arr[i] === 'object')
+        {
+            fun1(arr[i]);
+        }
+        else
+        {
+            finalArr.push(arr[i])
+        }
+    }
+    return finalArr;
+}
+
+const a2=fun1(arr);
+console.log(a2);
+
+Palindrome program:
+
+check if string is palindrome and check if number is palindrome
+
+var s = 'wow'
+
+function checkPalindrome(s)
+{
+    return s.split(' ').reverse().join(' ')
+}
+var p =checkPalindrome(s);
+console.log(p);
+if(p===s)
+{
+    console.log('Palindrome')
+}
+else
+{
+    console.log('not Palindrome')
+}
+
+In JS floor has to be used to get 121/10 as 12 else we get result as 12.1
+
+var s = 121;
+var n=s;
+let val=0;
+function checkPalindromeForNum(s)
+{
+    while(s>0)
+    {
+        let p = s%10;
+        val = val * 10 + p;
+        s=Math.floor(s/10);
+    }
+    return val;
+}
+var p =checkPalindromeForNum(s);
+
+if(p===n)
+{
+    console.log('Palindrome')
+}
+else
+{
+    console.log('not Palindrome')
+}
+
+Other coding problems:
+
+
